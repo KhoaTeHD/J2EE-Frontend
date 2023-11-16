@@ -1,0 +1,197 @@
+.register {
+    height: 100vh;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Mali";
+
+}
+
+.card {
+    width: 60%;
+    display: flex;
+    flex-direction: row-reverse;
+    background-color: white;
+    border-radius: 10px;
+    min-height: 600px;
+    overflow: hidden;
+    border-radius: 25px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 0px 10px rgba(0, 0, 0, 0.22);
+    position: relative;
+}
+
+.left {
+    flex: 1;
+    background: linear-gradient(rgba(37, 119, 201, 0.5), rgba(11, 75, 107, 0.5)),
+    url("/images/background-1.gif") center;
+    background-size: cover;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    color: white;
+}
+
+.welcome {
+    color: #555;
+
+}
+
+.desc {
+    font-size: 22px;
+}
+
+.not {
+    font-size: 20px;
+}
+
+.btn {
+    width: 50%;
+    height: 45px;
+    border-radius: 20px;
+    background-color: #1CB3D9;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    font-weight: bolder;
+    box-shadow: 0 0.4rem #dfd9d9;
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+    font-family: "Mali";
+
+}
+
+.btn:active {
+    color: white;
+    box-shadow: 0 0.2rem #dfd9d9;
+    transform: translateY(0.2rem);
+}
+
+.btn:hover:not(:disabled) {
+    background: #6de2fd;
+    color: white;
+    text-shadow: 0 0.1rem #bcb4b4;
+}
+
+.btn:disabled {
+    cursor: auto;
+    color: grey;
+}
+
+
+.right {
+    flex: 1;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    justify-content: center;
+}
+
+.title {
+    color: #555;
+}
+
+/* .form_box {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+} */
+.input_box {
+    position: relative;
+    margin: 10px 40px 0px 0px;
+    padding: 15px 0px 0px;
+    overflow: hidden;
+
+}
+
+.input[type="text"],
+.input[type="email"],
+.input[type="password"] {
+    font-size: 20px;
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    padding: 5px 0;
+    background-color: transparent;
+    outline: none;
+    font-family: 'Mali';
+    color: black;
+}
+
+.text_input {
+    position: absolute;
+    color: black;
+    font-size: 18px;
+    top: 0px;
+    left: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    font-family: 'Mali';
+    padding: 20px 0px;
+
+}
+.input[type="text"]:focus~.text_input,
+.input[type="text"]:valid~.text_input {
+    top: -24px;
+    font-size: 18px;
+    color: #007bff;
+    font-family: 'Mali';
+}
+.input[type="password"]:focus~.text_input,
+.input[type="password"]:valid~.text_input {
+    top: -24px;
+    font-size: 18px;
+    color: #007bff;
+    font-family: 'Mali';
+}
+.input[type="email"]:focus~.text_input,
+.input[type="email"]:valid~.text_input {
+    top: -24px;
+    font-size: 18px;
+    color: #007bff;
+    font-family: 'Mali';
+}
+.underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background-color: #3d3b3b;
+    transition: all 0.3s ease;
+    transform: scaleX(0);
+}
+
+.input[type="text"]:focus~.underline,
+.input[type="text"]:valid~.underline {
+    transform: scaleX(1);
+    background-color: #007bff;
+}
+.input[type="password"]:focus~.underline,
+.input[type="password"]:valid~.underline {
+    transform: scaleX(1);
+    background-color: #007bff;
+}
+.input[type="email"]:focus~.underline,
+.input[type="email"]:valid~.underline {
+    transform: scaleX(1);
+    background-color: #007bff;
+}
+
+.btnLogin {
+    width: 50%;
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 20px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 2px solid #fff;
+    color: #fff;
+    border-radius: 20px;
+    font-family: "Mali";
+}

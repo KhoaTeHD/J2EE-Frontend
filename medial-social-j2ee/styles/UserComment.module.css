@@ -1,0 +1,31 @@
+.container{
+    display: flex;
+    margin: 10px 10px 5px 10px;
+    background-color: #F6FCFE;
+}
+
+.comment_user_avt {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 10px;
+    background-color: #F6FCFE;
+}
+
+.user_name{
+    font-weight: 600;
+    font-size: 13px;
+    font-family: UI Historic, Segoe UI, Helvetica, Arial, sans-serif;
+}
+
+.user_comment{
+    font-family: "Segoe UI Historic", "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.user_name_comment{
+    padding: 8px;
+    border-radius: 15px;
+    border: 1px solid black;
+}

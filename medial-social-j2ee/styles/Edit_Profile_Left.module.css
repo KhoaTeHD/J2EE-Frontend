@@ -1,0 +1,37 @@
+.left {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 300px;
+}
+
+.left_heading {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    padding: 12px;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.left_edit_prof_btn,
+.left_change_pass_btn,
+.left_return_btn {
+    text-decoration: none;
+    font-size: 20px;
+    display: block;
+    width: 100%;
+    border: none;
+    background-color: #fff;
+    padding: 12px;
+    color: #333;
+    text-align: left;
+}
+
+
+.left_edit_prof_btn:hover,
+.left_change_pass_btn:hover,
+.left_return_btn:hover {
+    background-color: #ccc;
+    color: #000;
+    cursor: pointer;
+}

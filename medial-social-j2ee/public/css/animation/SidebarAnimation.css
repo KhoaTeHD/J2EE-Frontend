@@ -1,0 +1,36 @@
+:root {
+  --side-bar: "hide";
+}
+
+@keyframes show_hide {
+  0% {
+    width: 300px;
+  }
+  100% {
+    width: 75px;
+  }
+}
+#sidebar p {
+  text-wrap: nowrap;
+}
+
+#sidebar[animation=hide] {
+  width: 300px;
+  animation: show_hide 0.5s ease;
+  width: 75px;
+}
+#sidebar[animation=hide] p {
+  display: none;
+}
+
+#sidebar[animation=show] {
+  width: 75px;
+  width: 300px;
+  transition: all 0.5s ease;
+}
+
+@media only screen and (max-width: 768px) {
+  #sidebar[animation] {
+    width: 80px;
+  }
+}/*# sourceMappingURL=SidebarAnimation.css.map */

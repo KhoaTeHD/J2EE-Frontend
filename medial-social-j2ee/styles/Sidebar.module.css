@@ -1,0 +1,110 @@
+.container {
+    width: 300px;
+    background-color: white;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    /* position: sticky; */
+    /* top: 0; */
+    position: fixed;
+    height: fit-content;
+    height: 100%;
+    box-sizing: border-box;
+    padding-top: 20px;
+    border-right: 1px solid #d3d3d3;
+
+}
+.button{
+    outline: none;
+    border: none;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    width: 100%;
+    background-color: white;
+}
+.button:active{
+    background-color: #c4c4c4;
+}
+.top,
+.center,
+.bottom {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    /* overflow: hidden; */
+    background-color: white;
+    color: #9ca3af;
+    justify-content: center;
+}
+.bottom{
+    bottom: 0;
+    position: absolute;
+}
+.text{
+    font-size: 20px;
+    color: #06252d;
+    font-family: "Mali";
+    margin: 0px 10px;
+    text-wrap: nowrap;
+}
+.center {
+    padding: 0;
+}
+
+.bottom {
+    justify-content: center;
+    border: none;
+}
+
+.logo {
+    font-size: 24px;
+    margin-right: 10px;
+    cursor: pointer;
+    padding-left: 10px;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.list_item {
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+
+}
+.icon{
+    font-size: 20px;
+}
+.list_item:hover{
+    background-color: #c4c4c4;
+    color: white;
+}
+@media only screen and (max-width: 768px) {
+    .container {
+      width: 80px;
+    } 
+    .text {
+      display: none;
+    }
+}
+  

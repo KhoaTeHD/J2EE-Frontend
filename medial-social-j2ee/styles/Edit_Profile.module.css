@@ -1,0 +1,80 @@
+.profile {
+    margin-left: 300px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.right {
+    margin-left: 300px;
+    display: flex;
+    border-left: 1px solid #ccc;
+    flex-direction: column;
+    margin-bottom: 50px;
+}
+
+.right_heading {
+    font-size: 24px;
+    font-weight: 700;
+    padding: 12px;
+    color: rgba(0, 0, 0, 0.7);
+    justify-items: flex-start;
+}
+
+.right_prof {
+    display: flex;
+    justify-content: center;
+}
+
+.right_prof_content {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+}
+
+.right_prof_row {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.right_prof_row_avatar_src {
+    visibility: hidden;
+}
+
+.right_prof_row_first {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.right_prof_row_label {
+    flex: 1;
+    font-size: 16px;
+}
+
+.right_prof_row_input {
+    flex: 2;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 16px;
+}
+
+.gender_male {
+    margin-right: 78px;
+}
+
+
+.right_prof_save {
+    margin-top: 28px;
+    padding: 12px 0;
+    border: none;
+    border-radius: 4px;
+    background-color: aqua;
+    font-size: 16px;
+}
+
+.right_prof_save:hover {
+    background-color: #ccc;
+    cursor: pointer;
+}

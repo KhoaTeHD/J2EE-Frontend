@@ -1,0 +1,136 @@
+
+
+.container{
+    margin-left: 300px;
+    background-color: white;
+    overflow: hidden;
+
+}
+
+.container_top{
+    width: 100%;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+.boxes {
+    width: 70%;
+    display: flex;
+    padding: 35px 0px;
+    margin: 0px auto;
+}
+
+.recommend_box {
+    width: 100px;
+    height: 50px;
+    background-color: aqua;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    border: gray solid 1px;
+    cursor: pointer;
+}
+
+.friendlist_box {
+    margin-left: 20px;
+    width: 100px;
+    height: 50px;
+    background-color: aqua;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    border: gray solid 1px;
+    cursor: pointer;
+}
+
+.container_bottom {
+    height: calc(100%-150px);
+    min-height: 850px;
+}
+
+.container_friendlist {
+    width: 70%;
+    margin: 0px auto;
+    
+}
+
+.friendlist_label {
+    font-size: x-large;
+    margin-bottom: 20px;
+}
+
+.friendlist {
+    display: flex;
+}
+
+.recommend_card {
+    display: flex;
+    margin-right: 20%;
+    margin-bottom: 40px;
+}
+
+.recommend_card_img {
+    flex: 1;
+}
+
+.recommend_card_img img {
+    height: 100px;
+    width: 100px;
+    display: block;
+    margin: auto;
+    padding: 0%;
+}
+
+.recommend_card_information {
+    font-family: 'Segoe UI';
+    flex: 4;
+}
+
+.recommend_card_name {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.recommend_card_bio {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.recommend_card_mutual_friends {
+    font-size: 16px;
+    color: rgb(85, 83, 83);
+}
+
+.recommend_card_action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex: 1.1;
+}
+
+.recommend_card_action_button {
+    font-family: 'Segoe UI';
+    font-weight: 500;
+    width: 140px;
+    height: 40px;
+    margin: auto;
+    border-radius: 12px;
+    background-color:  #c9eff8;
+    color: #06252d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+    border: rgba(0, 0, 0, 0.25) solid 1px;
+    cursor: pointer;
+}
+
+.warning {
+    background-color: rgb(227, 61, 61);
+}

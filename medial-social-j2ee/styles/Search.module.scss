@@ -1,0 +1,56 @@
+@import 'mixin';
+@keyframes changeSize {
+    0%{
+        width: 0;
+        opacity: 0;
+    }
+    100%{
+        opacity: 100%;
+        width: 35%;
+    }
+}
+
+.search_area{
+    animation: changeSize 0.7s ease;
+    position: fixed;
+    top: 0;
+    left: 80px;
+    z-index: 200;
+    width: 35%;
+    height: 100vh;
+    padding: 20px;
+    transition: all 0.5s ease;
+    input{
+        margin-right: 10px;
+        @include button;
+        background-color: rgb(250, 250, 250);
+    }
+    button{
+        @include button;
+        transition: all 0.8s ease;
+    }
+    button:hover{
+        background-color: rgb(192, 190, 190);
+    }
+    hr{
+        margin-top: 20px;
+        opacity: 0.2;
+    }
+}
+.user{
+    @include flex-row-left;
+    img{
+        margin-right: 20px;
+        height: 50%;
+        width: 11%;
+    }
+    
+}
+.name{
+    font-weight: bold;
+    font-size: 20px;
+}
+.desc{
+    color: rgb(179, 172, 172);
+    font-size: 18px;
+}

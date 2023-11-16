@@ -1,0 +1,50 @@
+:root{
+    // --sidebar: 'hide';
+    --side-bar: "hide";
+}
+$status : "hide";
+@mixin hideProp{
+    width: 75px;
+}
+@mixin showProp{
+    width: 300px;
+}
+@keyframes show_hide {
+    0%{
+        @include showProp();
+    }
+    100%{
+        @include hideProp();
+    }
+}
+#sidebar{
+    p{
+        text-wrap: nowrap;
+    }
+    
+}
+#sidebar[animation="hide"]{
+    width: 300px;
+    p{
+        display: none;
+    }
+    animation: show_hide 0.5s ease;
+    @include hideProp();
+    
+}
+
+#sidebar[animation="show"]{
+    @include hideProp();
+    width: 300px;
+    transition: all 0.5s ease;
+}
+@mixin button {
+    outline: none;
+    border: none;
+}
+@media only screen and (max-width: 768px) {
+    #sidebar[animation] {
+      width: 80px;
+    } 
+
+}
