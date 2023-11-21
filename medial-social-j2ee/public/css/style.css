@@ -24,3 +24,12 @@ body{
 .none{
     display: none;
 }
+.bigLogo{
+    display: block;
+    width: 70%;
+    padding: 0;
+}
+.bigLogo img{
+    width: 100%;
+    
+}

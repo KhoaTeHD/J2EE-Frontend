@@ -6,7 +6,7 @@
     }
     100%{
         opacity: 100%;
-        width: 35%;
+        width: 23%;
     }
 }
 
@@ -16,9 +16,10 @@
     top: 0;
     left: 80px;
     z-index: 200;
-    width: 35%;
+    width: 23%;
     height: 100vh;
     padding: 20px;
+    // border-right: 1px solid #333;
     transition: all 0.5s ease;
     input{
         margin-right: 10px;
@@ -41,8 +42,8 @@
     @include flex-row-left;
     img{
         margin-right: 20px;
-        height: 50%;
-        width: 11%;
+        height: 18%;
+        width: 18%;
     }
     
 }

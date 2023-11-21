@@ -20,3 +20,9 @@
     @include flex-row();
     justify-content: flex-start;
 }
+
+@mixin bigLogo{
+    width: 80%;
+    margin: auto;
+
+}
