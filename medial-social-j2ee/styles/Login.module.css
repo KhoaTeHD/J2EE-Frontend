@@ -46,7 +46,7 @@
     font-size: 24px;
     color: white;
     font-family: "Mali";
-
+    margin-top: 40px;
 }
 
 .btn:active {
@@ -97,59 +97,72 @@
 
 .input_box {
     position: relative;
-    margin: 10px 40px 0px 0px;
-    padding: 15px 0px 0px;
+    padding: 30px 0px 30px 0px;
+    width: 100%;
+    max-width: 380px;
     overflow: hidden;
+
 }
 
-.input[type="text"] {
-    font-size: 20px;
+.form_input {
+    font-family: inherit;
     width: 100%;
     border: none;
-    border-bottom: 2px solid #ccc;
-    padding: 5px 0;
-    background-color: transparent;
-    outline: none;
-    font-family: 'Mali';
-    color: black;
+    border-bottom: 2px solid #9b9b9b;
+    outline: 0;
+    font-size: 18px;
+    color: #000;
+    padding: 7px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+    overflow: hidden;
+
+}
+
+.form_input::placeholder {
+    color: transparent;
+}
+
+.form_input:placeholder-shown~.text_input {
+    font-size: 17px;
+    cursor: text;
+    top: 20px;
 }
 
 .text_input {
     position: absolute;
-    color: black;
+    top: 0;
+    display: block;
+    transition: 0.2s;
     font-size: 18px;
-    top: 0px;
-    left: 0;
-    transition: all 0.3s ease;
+    color: #38caef;
     pointer-events: none;
-    font-family: 'Mali';
-    padding: 20px 0px;
+    font-weight: 900;
+}
+
+.form_input:focus {
+    padding-bottom: 6px;
+    font-weight: 700;
+    border-width: 3px;
+    border-image: linear-gradient(to right, #116399, #38caef);
+    border-image-slice: 1;
 
 }
 
-.input[type="text"]:focus~.text_input,
-.input[type="text"]:valid~.text_input {
-    top: -24px;
-    font-size: 18px;
-    color: #007bff;
-    font-family: 'Mali';
-}
-
-.underline {
+.form_input:focus~.text_input {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 2px;
-    width: 100%;
-    background-color: #3d3b3b;
-    transition: all 0.3s ease;
-    transform: scaleX(0);
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 17px;
+    color: #38caef;
+    font-weight: 700;
 }
 
-.input[type="text"]:focus~.underline,
-.input[type="text"]:valid~.underline {
-    transform: scaleX(1);
-    background-color: #007bff;
+/* reset input */
+.text_input:required,
+.text_input:invalid {
+    box-shadow: none;
 }
 
 .not {
@@ -170,4 +183,31 @@
     border-radius: 20px;
     font-family: "Mali";
 
+}
+.form{
+    padding: 0px 0px 80px 0px;
+    overflow: hidden;
+}
+.error {
+    color: red;
+    top: 0px;
+    right: 0px;
+    font-size: 16px;
+    position: absolute;
+}
+
+.fa {
+    margin-left: -12px;
+    margin-right: 8px;
+}
+.alert{
+    color: red;
+    font-size: 24px;
+    margin-top: 20px;
+    position: absolute;
+}
+.eyes{
+    position: absolute;
+    top: 30px;
+    right: 0px;
 }

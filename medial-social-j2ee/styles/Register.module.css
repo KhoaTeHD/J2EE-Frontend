@@ -5,6 +5,7 @@
     align-items: center;
     justify-content: center;
     font-family: "Mali";
+    overflow: hidden;
 
 }
 
@@ -24,7 +25,7 @@
 .left {
     flex: 1;
     background: linear-gradient(rgba(37, 119, 201, 0.5), rgba(11, 75, 107, 0.5)),
-    url("/images/background-1.gif") center;
+        url("/images/background-1.gif") center;
     background-size: cover;
     padding: 50px;
     display: flex;
@@ -47,7 +48,7 @@
 }
 
 .btn {
-    width: 50%;
+    width: 60%;
     height: 45px;
     border-radius: 20px;
     background-color: #1CB3D9;
@@ -60,6 +61,10 @@
     font-size: 24px;
     color: white;
     font-family: "Mali";
+    margin-top: 50px;
+    position: relative;
+    left: 15%;
+    overflow: hidden;
 
 }
 
@@ -86,103 +91,96 @@
     padding: 50px;
     display: flex;
     flex-direction: column;
-    gap: 50px;
     justify-content: center;
+    gap: 30px;
+    overflow: hidden;
 }
 
 .title {
     color: #555;
+    position: relative;
+    top: -24px;
 }
 
-/* .form_box {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-} */
-.input_box {
-    position: relative;
-    margin: 10px 40px 0px 0px;
-    padding: 15px 0px 0px;
+.form_box {
+    padding: 0px 0px 40px 0px;
     overflow: hidden;
 
 }
 
-.input[type="text"],
-.input[type="email"],
-.input[type="password"] {
-    font-size: 20px;
+.input_box {
+    position: relative;
+    padding: 20px 0px 10px 0px;
+    width: 100%;
+    max-width: 380px;
+    overflow: hidden;
+
+}
+
+.form_input {
+    font-family: inherit;
     width: 100%;
     border: none;
-    border-bottom: 2px solid #ccc;
-    padding: 5px 0;
-    background-color: transparent;
-    outline: none;
-    font-family: 'Mali';
-    color: black;
+    border-bottom: 2px solid #9b9b9b;
+    outline: 0;
+    font-size: 18px;
+    color: #000;
+    padding: 7px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.form_input::placeholder {
+    color: transparent;
+}
+
+.form_input:placeholder-shown~.text_input {
+    font-size: 17px;
+    cursor: text;
+    top: 20px;
 }
 
 .text_input {
     position: absolute;
-    color: black;
+    top: 0;
+    display: block;
+    transition: 0.2s;
     font-size: 18px;
-    top: 0px;
-    left: 0;
-    transition: all 0.3s ease;
+    color: #38caef;
     pointer-events: none;
-    font-family: 'Mali';
-    padding: 20px 0px;
+    font-weight: 900;
 
 }
-.input[type="text"]:focus~.text_input,
-.input[type="text"]:valid~.text_input {
-    top: -24px;
-    font-size: 18px;
-    color: #007bff;
-    font-family: 'Mali';
+
+.form_input:focus {
+    padding-bottom: 6px;
+    font-weight: 700;
+    border-width: 3px;
+    border-image: linear-gradient(to right, #116399, #38caef);
+    border-image-slice: 1;
+
 }
-.input[type="password"]:focus~.text_input,
-.input[type="password"]:valid~.text_input {
-    top: -24px;
-    font-size: 18px;
-    color: #007bff;
-    font-family: 'Mali';
-}
-.input[type="email"]:focus~.text_input,
-.input[type="email"]:valid~.text_input {
-    top: -24px;
-    font-size: 18px;
-    color: #007bff;
-    font-family: 'Mali';
-}
-.underline {
+
+.form_input:focus~.text_input {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 2px;
-    width: 100%;
-    background-color: #3d3b3b;
-    transition: all 0.3s ease;
-    transform: scaleX(0);
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 17px;
+    color: #38caef;
+    font-weight: 700;
 }
 
-.input[type="text"]:focus~.underline,
-.input[type="text"]:valid~.underline {
-    transform: scaleX(1);
-    background-color: #007bff;
-}
-.input[type="password"]:focus~.underline,
-.input[type="password"]:valid~.underline {
-    transform: scaleX(1);
-    background-color: #007bff;
-}
-.input[type="email"]:focus~.underline,
-.input[type="email"]:valid~.underline {
-    transform: scaleX(1);
-    background-color: #007bff;
+/* reset input */
+.text_input:required,
+.text_input:invalid {
+    box-shadow: none;
 }
 
 .btnLogin {
-    width: 50%;
+    width: 60%;
     padding: 10px;
     font-weight: bold;
     cursor: pointer;
@@ -194,4 +192,32 @@
     color: #fff;
     border-radius: 20px;
     font-family: "Mali";
+    align-items: center;
+    position: relative;
+    left: 15%;
 }
+
+.error {
+    color: red;
+    top: 0px;
+    right: 0px;
+    font-size: 16px;
+    position: absolute;
+}
+
+.message {
+    font-size: 20px;
+    color: red;
+    margin-top: 10px;
+    position: absolute;
+}
+
+.success {
+    overflow: hidden;
+}
+.eyes{
+    position: absolute;
+    top: 30px;
+    right: 0px;
+}
+
