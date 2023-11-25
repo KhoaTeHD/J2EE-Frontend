@@ -1,8 +1,23 @@
 import styles from '@/styles/Recommend.module.css';
-import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import axios from 'axios';
+import authHeader from "../api/auth-header";
 
 const FriendList = () => {
+
+    const [data,setData] = useState();
+    
+    useEffect (()=> {
+        const fetchData = async () => {
+            const response = await axios.get("http://localhost:8080/api/friends/get/1", { headers: authHeader() })
+            setData(response.data);
+        };
+        fetchData();
+    }, []);
+             
+    console.log(data);
+
     return (
         <div className={styles.container_bottom}>
                 <div className={styles.container_friendlist}>
