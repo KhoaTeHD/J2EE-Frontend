@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import authHeader from '../api/auth-header';
 
 
-const FriendCard = (props) => {
+const RecommendCard = (props) => {
     const { user, friend } = props;
 
     const [data,setData] = useState(0);
@@ -27,11 +27,10 @@ const FriendCard = (props) => {
                 <div className={styles.recommend_card_mutual_friends}>Có { data && (data) } Bạn chung</div>
             </div>
             <div className={styles.recommend_card_action}>
-                <div className={`${styles.recommend_card_action_button} ${styles.warning}`}>Hủy kết bạn</div>
-                {/* <div className={styles.recommend_card_action_button}>Nhắn tin</div> */}
+                <div className={styles.recommend_card_action_button}>Thêm bạn bè</div>
             </div>
         </div>
     );
 }
 
-export default FriendCard
+export default RecommendCard

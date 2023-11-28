@@ -1,19 +1,11 @@
-import React from "react";
 import styles from '@/styles/Recommend.module.css';
 import Image from 'next/image';
 
-export default function Recommend(){
-    return(
-        <div className={styles.container}>
-            <div className={styles.container_top}>
-                <div className={styles.boxes}>
-                    <div className={styles.recommend_box}>Gợi ý</div>
-                    <div className={styles.friendlist_box}>Bạn bè</div>
-                </div>
-            </div>
-            <div className={styles.container_bottom}>
+const FrRequest = () => {
+    return (
+        <div className={styles.container_bottom}>
                 <div className={styles.container_friendlist}>
-                    <div className={styles.friendlist_label}>Gợi ý</div>
+                    <div className={styles.friendlist_label}>Lời mời kết bạn</div>
                     <div className={styles.FriendList}>
                         <div className={styles.recommend_card}>
                             <div className={styles.recommend_card_img}><Image src="/images/avatar.png" width="100" height="100"></Image></div>
@@ -73,6 +65,7 @@ export default function Recommend(){
                     </div>
                 </div>
             </div>
-        </div>
-    )
+    );
 }
+
+export default FrRequest
