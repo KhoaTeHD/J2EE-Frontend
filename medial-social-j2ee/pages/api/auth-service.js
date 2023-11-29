@@ -25,7 +25,6 @@ const login = (gmail, password) => {
 };
 
 const logout = () => {
-  // sessionStorage.removeItem("user");
   window.sessionStorage.removeItem('user');
 };
 
