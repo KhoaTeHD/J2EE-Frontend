@@ -8,7 +8,7 @@ import authService from '../api/auth-service'
 const Friends = () => {
     var user = authService.getCurrentUser();
 
-    const [data,setData] = useState();
+    const [data,setData] = useState([]);
     
     useEffect (()=> {
         const fetchData = async () => {
