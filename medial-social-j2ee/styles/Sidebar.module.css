@@ -34,6 +34,10 @@
 .button:active{
     background-color: #c4c4c4;
 }
+.button:hover{
+    background-color: #c4c4c4;
+    color: white;
+}
 .top,
 .center,
 .bottom {
@@ -90,12 +94,34 @@
     display: flex;
     align-items: center;
     text-decoration: none;
-
 }
 .icon{
     font-size: 20px;
 }
 .list_item:hover{
+    background-color: #c4c4c4;
+    color: white;
+}
+.logout{
+    background-color: white;
+    border: none;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    width: 100%;
+}
+.text_logout{
+    font-size: 20px;
+    color: #06252d;
+    font-family: "Mali";
+    margin: 7px 0px 0px 10px;
+    text-wrap: nowrap;
+}
+.logout:hover{
     background-color: #c4c4c4;
     color: white;
 }
@@ -107,4 +133,6 @@
       display: none;
     }
 }
-  
+/* .notification{
+    position: absolute;
+} */

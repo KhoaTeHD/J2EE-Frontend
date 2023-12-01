@@ -5,9 +5,7 @@ import Head from 'next/head';
 import AuthService from './../api/auth-service';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import React from "react";
 import eventBus from '../api/eventBus';
-
 
 function changeSidebar() {
     let status = 'show';
@@ -20,13 +18,17 @@ function changeSidebar() {
 const Sidebar = () => {
     const [currentUser, setCurrentUser] = useState(undefined);
     const router = useRouter();
+    const [showLoginAlert, setShowLoginAlert] = useState(false);
     useEffect(() => {
         const user = AuthService.getCurrentUser();
 
-        if (user) {
+        if (!user) { //kiểm tra nó chưa đăng nhập mà nó đòi vô url khác nè
+            window.alert('Để tham gia vào FakeIns vui lòng đăng nhập!');
+            router.push("/"); // Chuyển hướng về trang đăng nhập
+        }
+        else {
             setCurrentUser(user);
         }
-
         eventBus.on("logout", () => {
             logOut();
         });
@@ -34,11 +36,11 @@ const Sidebar = () => {
         return () => {
             eventBus.remove("logout");
         };
-    }, []);
+    }, [router]);
     const logOut = () => {
         AuthService.logout();
-        // setCurrentUser(undefined);
-        // router.push('/');
+        // window.history.replaceState({}, '', '/');
+        router.replace("/");
     };
 
     return (
@@ -48,7 +50,7 @@ const Sidebar = () => {
             </Head>
             <div className={styles.top}>
                 <Link className={styles.logo} href={"/home"}>
-                    <Image src="" alt="" width="80" height="80" />
+                    <Image src="/icons/Fakeins.png" alt="" width="80" height="80" />
                 </Link>
             </div>
             <div className={styles.center}>
@@ -75,17 +77,19 @@ const Sidebar = () => {
                     </Link>
                     {currentUser && (<Link className={styles.list_item} href={"/Profile"}>
                         <Image className={styles.icon} src="/icons/icons8-user-64.png" alt="" width="40" height="40" />
-                        <p className={styles.text}> {currentUser.gmail}</p>                       
+                        <p className={styles.text}> {currentUser.gmail}</p>
                     </Link>)}
                 </ul>
             </div>
+
             <div className={styles.bottom}>
                 <ul className={styles.list}>
-                    <button className={styles.list_item} onClick={logOut}>
+                    <button className={styles.logout} onClick={logOut}>
                         <Image className={styles.icon} src="/icons/icons8-logout-64.png" alt="" width="40" height="40" />
-                        <p className={styles.text}>Đăng xuất</p>
+                        <p className={styles.text_logout}>Đăng xuất</p>
                     </button>
                 </ul>
+
             </div>
 
         </div>

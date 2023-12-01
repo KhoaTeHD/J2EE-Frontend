@@ -1,7 +1,8 @@
 import axios from "axios";
-
+import authHeader from "./auth-header";
+// import { useRouter } from "next/router";
 const API_URL = "http://localhost:8080/api/auth/";
-
+// const router = useRouter();
 const register = (gmail, password, profileName) => {
   return axios.post(API_URL + "signup", {
     gmail,
@@ -25,12 +26,20 @@ const login = (gmail, password) => {
 };
 
 const logout = () => {
-  window.sessionStorage.removeItem('user');
+  sessionStorage.removeItem('user');
+  // return axios
+  //   .post(API_URL + "logout", { headers: authHeader() })
+  //   .then((response) => {
+  //     if (response.data.success) {
+  //       sessionStorage.removeItem("user");
+  //     }
+  //     return response.data;
+  //   });
 };
 
 const getCurrentUser = () => {
   if (typeof window !== 'undefined') {
-  return JSON.parse(sessionStorage.getItem("user"));
+    return JSON.parse(sessionStorage.getItem("user"));
   }
 };
 
