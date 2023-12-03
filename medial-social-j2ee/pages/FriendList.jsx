@@ -3,6 +3,7 @@ import styles from '@/styles/Recommend.module.css';
 import Friends from "./components/Friends";
 import Recommend from "./components/Recommend";
 import { useState } from "react";
+import FrRequest from "./components/FrRequest";
 
 export default function FriendList(){
 
@@ -23,7 +24,7 @@ export default function FriendList(){
             </div>
             {content == "friendlist" && <Friends/>}
             {content == "recommend" && <Recommend/>}
-            {/* {content == "friendrequest" && <Recommend/>} */}
+            {content == "friendrequest" && <FrRequest/>}
         </div>
     )
 }
