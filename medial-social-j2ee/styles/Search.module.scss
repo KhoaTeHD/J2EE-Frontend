@@ -7,10 +7,12 @@
     100%{
         opacity: 100%;
         width: 22%;
+        background-color: white;
     }
 }
 
 .search_area{
+    
     animation: changeSize 0.7s ease;
     position: fixed;
     top: 0;
@@ -37,6 +39,7 @@
         margin-top: 20px;
         opacity: 0.2;
     }
+    background-color: white;
 }
 .user{
     @include flex-row-left;

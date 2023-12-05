@@ -7,6 +7,10 @@ import { useState,useRef } from 'react';
 export default function Search() {
     const [data, setdata] = useState(undefined);
     const inputRef = useRef(null);
+    const demoData = {
+        avatar : "/images/avatar.png",
+        biography : "không có mô tả bản thân",
+    }
     async function searchInfoUser() {
         const username = inputRef.current.value;
         console.log(username);
@@ -23,10 +27,10 @@ export default function Search() {
                 <hr />
                 { data != undefined &&  data.map(val=>(
                     <div className={style.user} key={val.userId}>
-                        <img src={val.avatar==null ? "/images/avatar.png" : val.avatar} alt="" />
+                        <img src={val.avatar==null ? demoData.avatar : val.avatar} alt="" />
                         <div>
                             <p className={style.name}>{val.profileName}</p>
-                            <p className={style.desc}>{val.biography == null ? "rất thích làm trap boy" : val.biography}</p>
+                            <p className={style.desc}>{val.biography == null ? demoData.biography : val.biography}</p>
                         </div>
 
                     </div>
