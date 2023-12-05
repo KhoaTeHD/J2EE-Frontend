@@ -148,3 +148,7 @@
 .warning {
     background-color: rgb(227, 61, 61);
 }
+
+.successful {
+    background-color: rgb(106, 154, 244)
+}
