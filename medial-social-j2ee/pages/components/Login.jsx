@@ -1,7 +1,7 @@
 import styles from '@/styles/Login.module.css'
 import Link from 'next/link'
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AuthService from './../api/auth-service';
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
@@ -61,6 +61,15 @@ const Login = () => {
             setLoading(false);
         }
     };
+    //không rollback được về lại đăng nhập khi người dùng ko bấm logout
+    const [currentUser, setCurrentUser] = useState(undefined);
+    useEffect(() => {
+      const user = AuthService.getCurrentUser();
+      if (user) { 
+        setCurrentUser(user);
+        router.push("Homepage");
+      }
+  }, []);
     return (
         <div className={styles.container}>
             <div className={styles.login}>

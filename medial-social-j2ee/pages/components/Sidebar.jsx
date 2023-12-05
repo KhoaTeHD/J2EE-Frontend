@@ -5,8 +5,7 @@ import Head from 'next/head';
 import AuthService from './../api/auth-service';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import eventBus from '../api/eventBus';
-
+import Notification from './Notification';
 function changeSidebar() {
     let status = 'show';
     document.getElementById('searchBox').classList.toggle('none');
@@ -24,22 +23,15 @@ const Sidebar = () => {
 
         if (!user) { //kiểm tra nó chưa đăng nhập mà nó đòi vô url khác nè
             window.alert('Để tham gia vào FakeIns vui lòng đăng nhập!');
+            // Notification.show();
             router.push("/"); // Chuyển hướng về trang đăng nhập
         }
         else {
             setCurrentUser(user);
         }
-        eventBus.on("logout", () => {
-            logOut();
-        });
-
-        return () => {
-            eventBus.remove("logout");
-        };
     }, [router]);
     const logOut = () => {
         AuthService.logout();
-        // window.history.replaceState({}, '', '/');
         router.replace("/");
     };
 
@@ -77,7 +69,7 @@ const Sidebar = () => {
                     </Link>
                     {currentUser && (<Link className={styles.list_item} href={"/Profile"}>
                         <Image className={styles.icon} src="/icons/icons8-user-64.png" alt="" width="40" height="40" />
-                        <p className={styles.text}> {currentUser.gmail}</p>
+                        <p className={styles.text}> {currentUser.profileName}</p>
                     </Link>)}
                 </ul>
             </div>
