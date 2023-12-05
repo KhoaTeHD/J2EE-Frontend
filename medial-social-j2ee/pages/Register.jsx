@@ -137,9 +137,9 @@ const register = () => {
                   <label className={styles.text_input} htmlFor="">Mật khẩu</label>
                   <div className={styles.eyes} onClick={() => setVisible(!visible)}>
                     {visible ? <Image className={styles.card_img} src="/icons/icons8-hide-48.png" alt="" width="30" height="30" />
-                            : <Image className={styles.card_img} src="/icons/icons8-show-48.png" alt="" width="30" height="30" />}
+                      : <Image className={styles.card_img} src="/icons/icons8-show-48.png" alt="" width="30" height="30" />}
                   </div>
-                 
+
                 </div>
                 <div className={styles.input_box}>
                   <Input className={styles.form_input} type="text"

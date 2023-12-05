@@ -92,3 +92,7 @@
     flex-direction: column;
     align-items: center;
 }
+
+.avatar_src_img {
+    border-radius: 50%;
+}
