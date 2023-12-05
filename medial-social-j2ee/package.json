@@ -24,6 +24,7 @@
     "react-responsive-carousel": "^3.2.23",
     "react-validation": "^3.0.7",
     "tailwindcss": "3.3.2",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "yarn": "^1.22.21"
   }
 }

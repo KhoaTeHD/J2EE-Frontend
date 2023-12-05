@@ -25,13 +25,12 @@ const login = (gmail, password) => {
 };
 
 const logout = () => {
-  // sessionStorage.removeItem("user");
-  window.sessionStorage.removeItem('user');
+  sessionStorage.removeItem('user');
 };
 
 const getCurrentUser = () => {
   if (typeof window !== 'undefined') {
-  return JSON.parse(sessionStorage.getItem("user"));
+    return JSON.parse(sessionStorage.getItem("user"));
   }
 };
 
