@@ -17,7 +17,6 @@ function changeSidebar() {
 const Sidebar = () => {
     const [currentUser, setCurrentUser] = useState(undefined);
     const router = useRouter();
-    const [showLoginAlert, setShowLoginAlert] = useState(false);
     useEffect(() => {
         const user = AuthService.getCurrentUser();
 
@@ -32,7 +31,7 @@ const Sidebar = () => {
     }, [router]);
     const logOut = () => {
         AuthService.logout();
-        router.replace("/");
+        router.push("/");
     };
 
     return (
