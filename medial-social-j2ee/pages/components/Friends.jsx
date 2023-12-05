@@ -16,6 +16,7 @@ const Friends = () => {
             setData(response.data);
         };
         fetchData();
+        //console.log(data);
     }, []);
 
     //console.log(data);

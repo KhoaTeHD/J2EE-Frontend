@@ -12,7 +12,6 @@ export default function FriendList(){
     const changeContent = (content) => {
         setContent(content);
     }
-
     return(
         <div className={styles.container}>
             <div className={styles.container_top}>
