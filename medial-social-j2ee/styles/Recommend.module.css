@@ -1,5 +1,4 @@
 
-
 .container{
     margin-left: 300px;
     background-color: white;
@@ -125,14 +124,17 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    flex: 1.1;
+    /* flex: 1.1; */
+    min-width: 190px;
+    padding-right: 5px;
 }
 
 .recommend_card_action_button {
     font-family: 'Segoe UI';
     font-weight: 500;
-    width: 140px;
+    min-width: 140px;
     height: 40px;
+    padding: 0px 20px;
     margin: auto;
     border-radius: 12px;
     background-color:  #c9eff8;
@@ -147,4 +149,8 @@
 
 .warning {
     background-color: rgb(227, 61, 61);
+}
+
+.successful {
+    background-color: rgb(106, 154, 244)
 }

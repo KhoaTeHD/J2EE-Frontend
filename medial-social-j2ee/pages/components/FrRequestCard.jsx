@@ -3,29 +3,37 @@ import axios from 'axios';
 import Image from 'next/image'
 import { useState, useEffect } from 'react';
 import authHeader from '../api/auth-header';
-import ReactDOM from 'react-dom';
 
 
 const FriendCard = (props) => {
     const { user, friend } = props;
 
-    const [data,setData] = useState(0);
-    
-    useEffect (()=> {
+    const [data, setData] = useState(0);
+
+    useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get("http://localhost:8080/api/friends/mutualfriends/"+ user + "," + friend, { headers: authHeader() })
+            const response = await axios.get("http://localhost:8080/api/friends/mutualfriends/" + user + "," + friend, { headers: authHeader() })
             setData(response.data);
         };
         fetchData();
     }, []);
 
-    const unfriendAPI = async () => {
-        const response = await axios.delete("http://localhost:8080/api/friends/unfriend/"+ user + "/" + friend , { headers: authHeader()})
-        console.log(response.data);
+    const acceptRequest = async () => {
+        const response = await axios.post("http://localhost:8080/api/requests/accept/"+ user + "/" + friend , { headers: authHeader()})
     };
 
-    const unfriendHandler = (event) => {
-        unfriendAPI();
+    const denyRequest = async () => {
+        const response = await axios.delete("http://localhost:8080/api/requests/deny/"+ user + "/" + friend , { headers: authHeader()})
+    };
+
+    const acceptHandler = (event) => {
+        acceptRequest();
+        const card = event.target.parentNode.parentNode;
+        card.remove();
+    }
+
+    const denyHandler = (event) => {
+        denyRequest();
         const card = event.target.parentNode.parentNode;
         card.remove();
     }
@@ -39,9 +47,9 @@ const FriendCard = (props) => {
                 <div className={styles.recommend_card_mutual_friends}>Có { data && (data) } Bạn chung</div>
             </div>
             <div className={styles.recommend_card_action}>
-                <div className={`${styles.recommend_card_action_button} ${styles.warning}`} onClick={unfriendHandler}>Hủy kết bạn</div>
-                {/* <div className={styles.recommend_card_action_button}>Nhắn tin</div> */}
-            </div>
+                <div className={styles.recommend_card_action_button} onClick={acceptHandler}>Chấp nhận</div>
+                <div className={`${styles.recommend_card_action_button} ${styles.warning}`} onClick={denyHandler}>Từ chối</div>
+                </div>
         </div>
     );
 }
