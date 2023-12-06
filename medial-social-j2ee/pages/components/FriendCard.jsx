@@ -3,6 +3,7 @@ import axios from 'axios';
 import Image from 'next/image'
 import { useState, useEffect } from 'react';
 import authHeader from '../api/auth-header';
+import ReactDOM from 'react-dom';
 
 
 const FriendCard = (props) => {
@@ -18,6 +19,17 @@ const FriendCard = (props) => {
         fetchData();
     }, []);
 
+    const unfriendAPI = async () => {
+        const response = await axios.delete("http://localhost:8080/api/friends/unfriend/"+ user + "/" + friend , { headers: authHeader()})
+        console.log(response.data);
+    };
+
+    const unfriendHandler = (event) => {
+        unfriendAPI();
+        const card = event.target.parentNode.parentNode;
+        card.remove();
+    }
+
     return (
         <div className={styles.recommend_card}>
             <div className={styles.recommend_card_img}><Image src="/images/avatar.png" width="100" height="100" alt={props.name}></Image></div>
@@ -27,7 +39,7 @@ const FriendCard = (props) => {
                 <div className={styles.recommend_card_mutual_friends}>Có { data && (data) } Bạn chung</div>
             </div>
             <div className={styles.recommend_card_action}>
-                <div className={`${styles.recommend_card_action_button} ${styles.warning}`}>Hủy kết bạn</div>
+                <div className={`${styles.recommend_card_action_button} ${styles.warning}`} onClick={unfriendHandler}>Hủy kết bạn</div>
                 {/* <div className={styles.recommend_card_action_button}>Nhắn tin</div> */}
             </div>
         </div>
