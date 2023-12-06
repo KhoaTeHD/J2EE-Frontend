@@ -18,6 +18,8 @@ export default function App({ Component, pageProps }) {
         </link>
         <link href='https://fonts.googleapis.com/css?family=Mali' rel='stylesheet'>
         </link>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+
       </Head>
       <Layout>
         {/* <AppProvider> */}

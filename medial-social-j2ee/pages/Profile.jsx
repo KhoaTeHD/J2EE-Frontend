@@ -1,10 +1,29 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import styles from '@/styles/Profile.module.css'
+import styles from '@/styles/Profile.module.css';
 import Post from "./components/Post";
+import authHeader from "./api/auth-header";
+import authService from './api/auth-service';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Profile = () => {
+    var user = authService.getCurrentUser();
+
+    const [data, setData1] = useState([]);
+    const [num_friends, setData2] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response1 = await axios.get("http://localhost:8080/api/userProfile/id/" + user.id, { headers: authHeader() })
+            setData1(response1.data);
+            const response2 = await axios.get("http://localhost:8080/api/userProfile/numFriends/" + user.id, { headers: authHeader() })
+            setData2(response2.data);
+        };
+        fetchData();
+    }, []);
+
     return (
         <div className={styles.profile}>
             <style jsx global>{`
@@ -17,10 +36,10 @@ const Profile = () => {
             <div className={styles.top}>
                 <div className={styles.avatar}>
                     <div className={styles.avatar_src}>
-                        <Image src="/images/avatar.png" width="120" height="120"></Image>
+                        <img className={styles.avatar_src_img} src={data.avatar != null ? data.avatar : '/images/avatar.png'} width="120" height="120" alt="avatar"></img>
                     </div>
 
-                    <p className={styles.name}>Võ Quang Đăng Khoa</p>
+                    <p className={styles.name}>{data.profileName}</p>
                 </div>
 
                 <div className={styles.info}>
@@ -30,10 +49,10 @@ const Profile = () => {
                         </Link>
                         <p className={styles.num_post}>05 bài viết</p>
                         <Link className={styles.num_friends} href={"/FriendList"}>
-                            <p>10 bạn bè</p>
+                            <p>{num_friends} bạn bè</p>
                         </Link>
                     </div>
-                    <p className={styles.biography}>Chỉ cần tìm được chút rực rỡ giữa đống tro tàn. Nguyện một lòng ngắm nhìn cho đến khi nó tự mình tàn đi, không để lại chút dấu vết.</p>
+                    <p className={styles.biography}>{data.biography == null ? "Chưa có tiểu sử" : data.biography}</p>
                 </div>
             </div>
 
@@ -46,7 +65,7 @@ const Profile = () => {
                 <Post />
                 <Post />
             </div>
-        </div>
+        </div >
     )
 }
 

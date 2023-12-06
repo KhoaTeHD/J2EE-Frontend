@@ -31,9 +31,10 @@
 }
 
 .right_prof_row {
-    margin-bottom: 24px;
+    margin-bottom: 8px;
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .right_prof_row_avatar_src {
@@ -77,4 +78,28 @@
 .right_prof_save:hover {
     background-color: #ccc;
     cursor: pointer;
+}
+
+.right_prof_row_avatar_img {
+    border-radius: 50%;
+}
+
+.error,
+.error_avatar {
+    margin-bottom: 28px;
+    font-size: 12px;
+    color: rgb(247, 20, 20);
+    text-align: right;
+}
+
+.error_avatar {
+    text-align: center;
+}
+
+.count_bio {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 10px;
+    color: #636161;
 }

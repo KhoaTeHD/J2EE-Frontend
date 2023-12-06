@@ -1,0 +1,7 @@
+.container{
+    width: 300px;
+    background-color: white;
+    color: white;
+    display: flex;
+    z-index: 10;
+}
