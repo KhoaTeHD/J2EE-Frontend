@@ -72,7 +72,6 @@ const Edit_Profile = () => {
         setGender(selectedGender === "Nam" ? 1 : 0);
     };
 
-
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {

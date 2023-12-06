@@ -36,7 +36,7 @@ const Profile = () => {
             <div className={styles.top}>
                 <div className={styles.avatar}>
                     <div className={styles.avatar_src}>
-                        <Image className={styles.avatar_src_img} src={data.avatar != null ? `/images/${data.avatar}` : '/images/avatar.png'} width="120" height="120"></Image>
+                        <img className={styles.avatar_src_img} src={data.avatar != null ? `http://localhost:8080/api/userProfile/public/images/${data.avatar}` : '/images/avatar.png'} width="120" height="120"></img>
                     </div>
 
                     <p className={styles.name}>{data.profileName}</p>
