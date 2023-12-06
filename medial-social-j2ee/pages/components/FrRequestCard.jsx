@@ -18,6 +18,26 @@ const FriendCard = (props) => {
         fetchData();
     }, []);
 
+    const acceptRequest = async () => {
+        const response = await axios.post("http://localhost:8080/api/requests/accept/"+ user + "/" + friend , { headers: authHeader()})
+    };
+
+    const denyRequest = async () => {
+        const response = await axios.delete("http://localhost:8080/api/requests/deny/"+ user + "/" + friend , { headers: authHeader()})
+    };
+
+    const acceptHandler = (event) => {
+        acceptRequest();
+        const card = event.target.parentNode.parentNode;
+        card.remove();
+    }
+
+    const denyHandler = (event) => {
+        denyRequest();
+        const card = event.target.parentNode.parentNode;
+        card.remove();
+    }
+
     return (
         <div className={styles.recommend_card}>
             <div className={styles.recommend_card_img}><Image src="/images/avatar.png" width="100" height="100" alt={props.name}></Image></div>
@@ -27,8 +47,8 @@ const FriendCard = (props) => {
                 <div className={styles.recommend_card_mutual_friends}>Có { data && (data) } Bạn chung</div>
             </div>
             <div className={styles.recommend_card_action}>
-                <div className={styles.recommend_card_action_button}>Chấp nhận</div>
-                <div className={`${styles.recommend_card_action_button} ${styles.warning}`}>Từ chối</div>
+                <div className={styles.recommend_card_action_button} onClick={acceptHandler}>Chấp nhận</div>
+                <div className={`${styles.recommend_card_action_button} ${styles.warning}`} onClick={denyHandler}>Từ chối</div>
                 </div>
         </div>
     );

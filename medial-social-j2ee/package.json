@@ -24,8 +24,12 @@
     "react-dom": "18.2.0",
     "react-responsive-carousel": "^3.2.23",
     "react-validation": "^3.0.7",
+<<<<<<< HEAD
     "sockjs-client": "^1.6.1",
     "stompjs": "^2.3.3",
+=======
+    "sweetalert2": "^11.6.13",
+>>>>>>> fa0b0e613ac7d00725fc872fdfae9a315e416dc2
     "tailwindcss": "3.3.2",
     "typescript": "^5.2.2",
     "yarn": "^1.22.21"
