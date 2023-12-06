@@ -75,30 +75,12 @@ const Edit_Profile = () => {
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setAvatar(imageUrl);
             setSelectedFile(file);
             setChangeAvatar(1);
         }
     };
-
-    const uploadImg = async () => {
-        if(selectedFile !== undefined){
-            const formData = new FormData();
-            formData.append('image', selectedFile);
-            
-            console.log(selectedFile);
-
-            await axios.post("http://localhost:8080/cloudinary/upload", formData, { headers: authHeader() })
-                .then(response => {
-                    setAvatar(response.data.url);
-                    return response.data.url;
-                })
-                .catch(error => {
-                    // Xử lý lỗi nếu có
-                    console.error(error);
-                    return null;
-                });
-            }
-    }
 
     const handleSaveChange = async () => {
         let valid = 1;
@@ -144,15 +126,29 @@ const Edit_Profile = () => {
         if (valid == 1 && confirm("Bạn có chắc chắn muốn cập nhật các thông tin của người dùng này vào cơ sở dữ liệu?")) {
             
             var avtnew = "";
+            
             if(selectedFile !== undefined){
                 const formData = new FormData();
                 formData.append('image', selectedFile);
                 
-                console.log(selectedFile);
+                //console.log(data.avatar);
+
+                if(data.avatar != null){
+                    await axios.post("http://localhost:8080/cloudinary/delete?url=" +data.avatar, { headers: authHeader() })
+                    .then(response => {
+                        //console.log(response.data);
+                    })
+                    .catch(error => {
+                        // Xử lý lỗi nếu có
+                        console.error(error);
+                    });
+                }
     
                 await axios.post("http://localhost:8080/cloudinary/upload", formData, { headers: authHeader() })
                     .then(response => {
                         avtnew = response.data.url;
+                        setAvatar(response.data.url);
+                        data.avatar = response.data.url;
                     })
                     .catch(error => {
                         // Xử lý lỗi nếu có
@@ -160,7 +156,7 @@ const Edit_Profile = () => {
                     });
                 }
 
-            console.log(avtnew);
+            //console.log(avtnew);
             class User {
                 constructor(userId, profileName, birthday, biography, gender, avatar) {
                     this.userId = userId;
@@ -204,9 +200,8 @@ const Edit_Profile = () => {
                     <div className={styles.right_prof_content}>
                         <div className={styles.right_prof_row_first}>
                             <label className={styles.right_prof_row_avatar} htmlFor="right_prof_row_avatar_src">
-                                <Image
+                                <img
                                     className={styles.right_prof_row_avatar_img}
-                                    
                                     src={avatar}
                                     alt="Avatar"
                                     width={120}
