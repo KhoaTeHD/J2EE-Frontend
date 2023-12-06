@@ -3,20 +3,27 @@ import Link from "next/link";
 import Image from 'next/image';
 import Head from 'next/head';
 import ndkStyle from '@/styles/logo.module.css';
-
+import React, { useState, useEffect } from 'react';
 
 const Sidebar = () => {
-    
+
     function changeSidebar() {
         let status = 'show';
         document.getElementById('searchBox').classList.toggle('none');
         let checkExist = document.getElementById('searchBox').classList.contains('none');
         status = checkExist ? 'show' : 'hide';
         document.getElementById('sidebar').setAttribute('animation', status);
-        if(status=='hide') document.getElementById('logo').setAttribute('src','/icons/SmallLogo.png');
-        else document.getElementById('logo').setAttribute('src','/icons/Fakeins.png');
+        if (status == 'hide') document.getElementById('logo').setAttribute('src', '/icons/SmallLogo.png');
+        else document.getElementById('logo').setAttribute('src', '/icons/Fakeins.png');
     }
-    
+
+    const [showCreatePost, setShowCreatePost] = useState(false);
+
+    const handleCreatePostClose = () => {
+        setShowCreatePost(false);
+        // Redirect to home page or perform necessary actions here
+    };
+
 
     return (
         <div className={styles.container} id='sidebar' animation="show">
@@ -26,7 +33,7 @@ const Sidebar = () => {
             <div className={styles.top}>
                 <Link className='bigLogo' href={"/home"}>
                     {/* <Image src="/icons/Fakeins.png" alt="" width="80" height="80" /> */}
-                    <img src="/icons/Fakeins.png" alt="ảnh logo" id='logo'/>
+                    <img src="/icons/Fakeins.png" alt="ảnh logo" id='logo' />
                 </Link>
             </div>
             <div className={styles.center}>
@@ -39,7 +46,17 @@ const Sidebar = () => {
                         <Image className={styles.icon} src="/icons/icons8-search-64.png" alt="sear" width="40" height="40" />
                         <p className={styles.text} id='search' >Tìm kiếm</p>
                     </button>
-                    <Link className={styles.list_item} href={"/home"}>
+                    {/* <button onClick={setShowCreatePost(true)} className={styles.button}>
+                        <Image className={styles.icon} src="/icons/icons8-add-64.png" alt="create" width="40" height="40" />
+                        <p className={styles.text}>Tạo bài viết</p>
+                        {showCreatePost && (
+                            <>
+                                <div className={styles.overlay} />
+                                <CreatePost/>
+                            </>
+                        )}
+                    </button> */}
+                    <Link className={styles.list_item} href={"/CreatePost"}>
                         <Image className={styles.icon} src="/icons/icons8-add-64.png" alt="create" width="40" height="40" />
                         <p className={styles.text}>Tạo bài viết</p>
                     </Link>

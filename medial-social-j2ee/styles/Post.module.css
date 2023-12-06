@@ -124,3 +124,37 @@
 .comment_count{
     margin-left: auto;
 }
+
+.action:hover{
+    cursor: pointer;
+}
+
+.comment_textarea {
+    width: calc(100% - 16px); 
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding-top: 5px; 
+    outline: none; 
+    resize: none; 
+    margin-right: 8px;
+
+}
+
+.submit_button {
+    display: none;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 5px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.comment_textarea:focus + .submit_button {
+    display: block; /* Hiển thị nút gửi khi focus vào textarea */
+}
+
+.comment_area {
+    width: calc(100% - 60px);
+}

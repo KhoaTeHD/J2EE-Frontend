@@ -2,10 +2,11 @@ import styles from '@/styles/PostDetail.module.css'
 import Image from 'next/image';
 import UserComment from './UserComment';
 
-const Post = () => {
+const PostDetail = () => {
 
     return (
         <div className={styles.container}>
+            <Image className={styles.close_button} src="/icons/close.png" width="20" height="20"></Image>
             <div className={styles.post_container}>
                 <div className={styles.post}>
                     <Image className={styles.post_image} src="/images/test_post_img.jpg" width="1000" height="1000"></Image>
@@ -46,4 +47,4 @@ const Post = () => {
     );
 }
 
-export default Post
+export default PostDetail

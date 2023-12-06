@@ -1,7 +1,7 @@
 import '@/public/css/style.css'
 import Layout from './components/Layout';
 import Head from 'next/head';
-// import AppProvider from "../context/AppProvider.js";
+
 export default function App({ Component, pageProps }) {
 
   return (

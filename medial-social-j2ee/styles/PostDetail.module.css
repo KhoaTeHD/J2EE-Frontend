@@ -1,10 +1,21 @@
-.container {
+/* .container {
     display: flex !important;
     position: absolute;
     height: 100%;
     width: 100%;
     align-items: center;
     background-color: rgba(80, 80, 80, 0.5);
+} */
+
+.container {
+    display: flex !important;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 999;
+    align-items: center;
+    background-color: rgba(80, 80, 80, 0.5);
+    border-radius: 5px;
 }
 
 .post_container {
@@ -12,6 +23,7 @@
     left: 50%;
     transform: translateX(-50%);
     display: inline-flex;
+    border-radius: 9px;
 }
 
 .user {
@@ -68,7 +80,7 @@
 
 .post_image {
     max-width: 100%;
-    max-height: 650px;
+    max-height: 800px;
     border-radius: 5px;
     width: auto;
     height: auto;
@@ -80,7 +92,7 @@
     flex-direction: column;
 }
 
-.left_bottom{
+.left_bottom {
     margin-top: auto;
     margin-bottom: 10px;
 }
@@ -146,9 +158,33 @@
     margin-left: auto;
 }
 
-.post_comments{
+.post_comments {
     height: 400px;
     display: flex;
     flex-direction: column;
     background-color: #F6FCFE;
+}
+
+.close_button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.close_button:hover {
+    cursor: pointer;
+}
+
+.action:hover {
+    cursor: pointer;
+}
+
+.be_the_first {
+    display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
 }
