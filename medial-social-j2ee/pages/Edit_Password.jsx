@@ -3,6 +3,7 @@ import styles from '@/styles/Edit_Password.module.css'
 import OptionProfile from "./components/OptionEditProfile";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import authHeader from "./api/auth-header";
 import authService from './api/auth-service';
 import Image from "next/image";
 
@@ -88,6 +89,7 @@ const Edit_Password = () => {
                         setNewPass("");
                         setEnterNewPass("");
                     } else { };
+
 
                 })
                 .catch(error => {
