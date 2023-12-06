@@ -3,6 +3,7 @@
     position: absolute;
     height: 100%;
     width: 100%;
+    z-index: 999;
     align-items: center;
     background-color: rgba(80, 80, 80, 0.5);
 }

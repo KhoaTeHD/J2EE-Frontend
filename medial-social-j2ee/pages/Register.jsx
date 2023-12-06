@@ -98,6 +98,7 @@ const register = () => {
       );
     }
   };
+  
   return (
     <div className={styles.register}>
       <div className={styles.card}>
