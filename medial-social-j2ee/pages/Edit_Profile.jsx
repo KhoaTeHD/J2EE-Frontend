@@ -73,18 +73,19 @@ const Edit_Profile = () => {
         setGender(selectedGender === "Nam" ? 1 : 0);
     };
 
-
     const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setTempImageUrl(imageUrl);
-            setChangeAvatar(1);
-        }
-        const filePath = e.target.value;
-        const fileName = filePath.split('\\').pop();
-        setAvatar(fileName);
-        setSelectedFile(filePath);
+        // const file = e.target.files[0];
+        // if (file) {
+        //     const imageUrl = URL.createObjectURL(file);
+        //     setTempImageUrl(imageUrl);
+        //     setChangeAvatar(1);
+        // }
+        // const filePath = e.target.value;
+        // const fileName = filePath.split('\\').pop();
+        // setAvatar(fileName);
+        // setSelectedFile(filePath);
+        setSelectedFile(e.target.files[0]);
+
     };
 
     const handleSaveChange = () => {
@@ -146,11 +147,16 @@ const Edit_Profile = () => {
                     // Xử lý phản hồi từ API nếu cần
                     alert('Cập nhật thành công');
                     const formData = new FormData();
-                    formData.append('filePath', selectedFile);
+                    formData.append('avatar', selectedFile);
                     console.log(formData);
                     console.log(selectedFile);
 
-                    axios.post("http://localhost:8080/api/userProfile/uploadImage", formData, { headers: authHeader() })
+                    axios.post("http://localhost:8080/api/userProfile/uploadImage", formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            Authorization: authHeader(),
+                        },
+                    })
                         .then(response => {
                             console.log(response.data);
                         })
