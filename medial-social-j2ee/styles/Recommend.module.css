@@ -58,6 +58,7 @@
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
     border: gray solid 1px;
     cursor: pointer;
+    position: relative;
 }
 
 .container_bottom {
@@ -153,4 +154,15 @@
 
 .successful {
     background-color: rgb(106, 154, 244)
+}
+
+.dot {
+    height: 8px;
+    width: 8px;
+    background-color: #f44336;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    top: 6px;
+    left: 6px;
 }

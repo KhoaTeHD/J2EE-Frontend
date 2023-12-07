@@ -136,3 +136,17 @@
 /* .notification{
     position: absolute;
 } */
+
+.dot {
+    height: 8px;
+    width: 8px;
+    background-color: #f44336;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    top: 7px;
+}
+
+.notification {
+position: relative;
+}
