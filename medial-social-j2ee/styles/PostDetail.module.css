@@ -25,7 +25,6 @@
     transform: translateX(-50%);
     display: inline-flex;
     border-radius: 9px;
-    min-width: 80%;
 }
 
 .user {

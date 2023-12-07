@@ -21,7 +21,6 @@ const Homepage = () => {
         fetchData();
     }, []);
 
-
     return (
         <div className={styles.container}>
             {

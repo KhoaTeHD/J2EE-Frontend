@@ -8,21 +8,28 @@ import authHeader from "../api/auth-header";
 import authService from '../api/auth-service';
 
 const Post = () => {
+
+    var user = authService.getCurrentUser();
     
     const router = useRouter();
     const { postId } = router.query;
 
     const [data, setData] = useState();
 
+    const [currUserData, setCurrUserData] = useState();
+
     useEffect(() => {
         const fetchData = async () => {
             const response = await axios.get("http://localhost:8080/post/" + postId, { headers: authHeader() })
-            console.log(response.data);
             setData(response.data);
-            console.log(data);
+        };
+        const fetchCurrUserData = async () => {
+            const response = await axios.get("http://localhost:8080/api/users/id/" + user.id, { headers: authHeader() })
+            setCurrUserData(response.data);
         };
 
         fetchData();
+        fetchCurrUserData();
     }, []);
 
 
@@ -69,11 +76,13 @@ const Post = () => {
             <Image className={styles.close_button} src="/icons/close.png" width="20" height="20"></Image>
             <div className={styles.post_container}>
                 <div className={styles.post}>
-                    <Image className={styles.post_image} src={data && data.media && data.media[0].path} width="1000" height="1000"></Image>
+                    {data && data.media && data.media[0] && data.media[0].path && (
+                        <Image className={styles.post_image} src={data.media[0].path} width="1000" height="1000" />
+                    )}
                 </div>
                 <div className={styles.left_img}>
                     <div className={styles.user}>
-                        <Image className={styles.user_avt} src="/images/avatar.png" alt="Avatar" width="100" height="100"></Image>
+                        <Image className={styles.user_avt} src={data?.user?.avatar || "/images/avatar.png"} width="100" height="100"></Image>
                         <span className={styles.user_name}>{data && data.user.profileName}</span>
                         <span className={styles.dot}>•</span>
                         <span className={styles.time_since_post}>{time}</span>
@@ -103,7 +112,7 @@ const Post = () => {
                             <Image className={styles.action} src="/icons/post_share.png" alt="" width="32" height="32" />
                         </div>
                         <div className={styles.comment}>
-                            <Image className={styles.comment_user_avt} src="/images/avatar.png" alt="Avatar" width="100" height="100"></Image>
+                            <Image className={styles.comment_user_avt} src={currUserData?.avatar || "/images/avatar.png"} alt="Avatar" width="100" height="100"></Image>
                             <input ref={commentInputRef} className={styles.comment_input} type="text" placeholder="Viết bình luận..." />
                         </div>
                     </div>

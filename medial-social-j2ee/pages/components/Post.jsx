@@ -9,12 +9,13 @@ import Link from "next/link";
 
 const Post = (props) => {
 
-    //var user = authService.getCurrentUser();
+    var user = authService.getCurrentUser();
+
     const postId = props.postId;
-    const postUserId = props.userId;
 
     const [postData, setPostData] = useState();
-    const [postUserData, setPostUserData] = useState();
+
+    const [currUserData, setCurrUserData] = useState();
 
     useEffect(() => {
         const fetchPostData = async () => {
@@ -22,13 +23,13 @@ const Post = (props) => {
             setPostData(response.data);
         };
 
-        const fetchPostUserData = async () => {
-            const response = await axios.get("http://localhost:8080/api/users/id/" + postUserId, { headers: authHeader() })
-            setPostUserData(response.data);
+        const fetchCurrUserData = async () => {
+            const response = await axios.get("http://localhost:8080/api/users/id/" + user.id, { headers: authHeader() })
+            setCurrUserData(response.data);
         };
 
         fetchPostData();
-        fetchPostUserData();
+        fetchCurrUserData();
     }, []);
 
     function timeSincePost(postTime) {
@@ -84,14 +85,45 @@ const Post = (props) => {
         // }
     };
 
+    const isOwner = currUserData && postData && currUserData.id === postData.user.id;
+
+    const [showOptions, setShowOptions] = useState(false);
+
+    const toggleOptions = () => {
+        setShowOptions(!showOptions);
+    };
+
+    const handleEdit = () => {
+        // Xử lý chức năng chỉnh sửa bài viết ở đây
+    };
+
+    const handleDelete = () => {
+        // Xử lý chức năng xóa bài viết ở đây
+    };
+
+    const avtSrcPostUser = postData?.user?.avatar || "/images/avatar.png";
+    const avtSrcCurrUser = currUserData?.avatar || "/images/avatar.png";
+    //const 
+
     return (
         <div className={styles.container}>
-            <div className={styles.user}>
-                <Image className={styles.user_avt} src="/images/avatar.png" alt="Avatar" width="100" height="100"></Image>
-                <span className={styles.user_name}>{postUserData && postUserData.profileName}</span>
-                <span className={styles.dot}>•</span>
-                <span className={styles.time_since_post}>{time}</span>
+            <div className={styles.top_container}>
+                <div className={styles.user}>
+                    <Image className={styles.user_avt} src={avtSrcPostUser} alt="Avatar" width="100" height="100"></Image>
+                    <span className={styles.user_name}>{postData && postData.user.profileName}</span>
+                    <span className={styles.dot1}>•</span>
+                    <span className={styles.time_since_post}>{time}</span>
+                </div>
+                {isOwner && (
+                    <div className={styles.options} onClick={toggleOptions}>
+                    <span className={styles.options_icon}>...</span>
+                    {/* {showOptions && (
+                        
+                    )} */}
+                </div>
+                )}
             </div>
+
             <p className={styles.post_caption}>{postData && postData.caption}</p>
             <Link href={`/posts/${postId}`}>
                 <div className={styles.post}>
@@ -103,16 +135,16 @@ const Post = (props) => {
                 <span className={styles.comment_count}>{postData && postData.comments.length} bình luận</span>
             </div>
             <div className={styles.actions}>
-                <Image className={styles.action} src="/icons/post_heart.png" alt="" width="32" height="32" />
+                <Image className={styles.action} src="/icons/post_heart.png" alt="like" width="32" height="32" />
 
                 <Link href={`/posts/${postId}`}>
-                    <Image className={styles.action} src="/icons/post_comment.png" alt="" width="32" height="32" />
+                    <Image className={styles.action} src="/icons/post_comment.png" alt="comment" width="32" height="32" />
                 </Link>
 
-                <Image className={styles.action} src="/icons/post_share.png" alt="" width="32" height="32" />
+                <Image className={styles.action} src="/icons/post_share.png" alt="share" width="32" height="32" />
             </div>
             <div className={styles.comment}>
-                <Image className={styles.comment_user_avt} src="/images/avatar.png" alt="Avatar" width="100" height="100"></Image>
+                <Image className={styles.comment_user_avt} src={avtSrcCurrUser} alt="Avatar" width="100" height="100"></Image>
                 {/* <input className={styles.comment_input} type="text" placeholder="Viết bình luận..."/> */}
                 <div className={styles.comment_area}>
                     <textarea className={styles.comment_textarea} value={comment} onChange={handleCommentChange} placeholder="Viết bình luận..." />

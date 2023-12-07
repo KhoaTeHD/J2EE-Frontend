@@ -6,22 +6,32 @@ import authHeader from "./api/auth-header";
 import authService from './api/auth-service';
 import { format } from 'date-fns';
 import SavePostSuccessPopup from './components/SavePostSuccessPopup';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreatePost = () => {
 
+    const waitTime = 1500;
+
+    const notify = (message) => toast.warn(message);
+
+    const notifySuccess = (message) => {
+        toast.success(message, { autoClose: waitTime });
+        setTimeout(() => {
+            window.location.href = '/Homepage'; // Điều hướng đến trang chủ
+        }, waitTime);
+    }
     var curentUser = authService.getCurrentUser();
 
     const [user, setUser] = useState();
 
-    //const [selectedImages, setSelectedImages] = useState([]);
+    const [overlay, setOverlay] = useState(false);
+
     const [selectedImage, setSelectedImage] = useState();
 
-    const [showNotification, setShowNotification] = useState(false);
+    const [selectedImageURL, setSelectedImageURL] = useState('');
 
-    const handleNotificationClose = () => {
-        setShowNotification(false);
-        // Redirect to home page or perform necessary actions here
-    };
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -32,41 +42,38 @@ const CreatePost = () => {
         fetchUserData();
     }, []);
 
+    const clearSelectedImage = () => {
+        setSelectedImage(null);
+        setSelectedImageURL('');
+    };
+
     const handleImageChange = (event) => {
-        // const files = event.target.files;
-        // const imagesArray = [];
-
-        // for (let i = 0; i < files.length; i++) {
-        //     const reader = new FileReader();
-
-        //     reader.onload = (e) => {
-        //         imagesArray.push(e.target.result);
-
-        //         if (imagesArray.length === files.length) {
-        //             setSelectedImages([...selectedImages, ...imagesArray]);
-        //         }
-        //     };
-
-        //     reader.readAsDataURL(files[i]);
-        // }
-
         const file = event.target.files[0];
-        console.log(file);
         setSelectedImage(file);
 
+        const imageURL = URL.createObjectURL(file);
+        setSelectedImageURL(imageURL);
     };
 
     const [text, setText] = useState('');
 
     const handleInputChange = (event) => {
-        setText(event.target.value); 
+        setText(event.target.value);
     };
 
     const currentDate = new Date();
 
     const formattedDate = format(currentDate, 'yyyy-MM-dd HH:mm:ss');
 
-    const saveNewPost = async() => {
+    const saveNewPost = async () => {
+
+        setIsLoading(true);
+
+        if (!selectedImage && !text) {
+            setIsLoading(false);
+            notify("Vui lòng thêm caption hoặc hình ảnh trước khi đăng bài!");
+            return;
+        }
 
         const media = {
             path: "",
@@ -82,7 +89,7 @@ const CreatePost = () => {
 
         const formData = new FormData();
         formData.append('image', selectedImage);
-        
+
         await axios.post("http://localhost:8080/cloudinary/upload", formData, { headers: authHeader() })
             .then(response => {
                 media.path = response.data.url;
@@ -104,33 +111,57 @@ const CreatePost = () => {
 
         await axios.post('http://localhost:8080/media/newmedia', media, { headers: authHeader() })
             .then(response => {
-                setShowNotification(true);
+                setIsLoading(false);
+                //setShowNotification(true);
+                notifySuccess("Đăng bài thành công!");
+                setOverlay(true);
             })
             .catch(error => {
+                setIsLoading(false);
                 console.error('Lỗi khi thêm bài viết:', error);
             });
 
-        
     };
+
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowHeight(window.innerHeight);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    // Tính toán chiều cao tối đa của hình ảnh
+    const maxImageHeight = windowHeight * 0.55;
 
     return (
         <div className={styles.container}>
-            {showNotification && (
-                <>
-                    <div className={styles.overlay} />
-                    <SavePostSuccessPopup
-                        message="Bài viết đã được đăng thành công!"
-                        onClose={handleNotificationClose}
-                    />
-                </>
+
+            {overlay && (
+                <div className={styles.overlay}></div>
+            )
+            }
+
+            <ToastContainer />
+            {isLoading && (
+                <div className={styles.loading}>
+                    <div className={styles.spinner}></div>
+                </div>
             )}
+
             <Image className={styles.close_button} src="/icons/close.png" width="20" height="20"></Image>
             <div class={styles.post_container}>
                 <div className={styles.head}>
                     <span className={styles.head_text}>Tạo bài viết</span>
                 </div>
                 <div className={styles.user}>
-                    <Image className={styles.user_avt} src="/images/avatar.png" alt="Avatar" width="100" height="100"></Image>
+                    <Image className={styles.user_avt} src={user?.avatar || "/images/avatar.png"} width="100" height="100"></Image>
                     <span className={styles.user_name}>{curentUser.profileName}</span>
                 </div>
                 <div className={styles.post_content}>
@@ -146,8 +177,18 @@ const CreatePost = () => {
                         </div>
                     )} */}
 
-                    <input type="file" accept="image/*" id="image_upload" onChange={handleImageChange} /*style={{ display: 'none' }}*/ />
+                    {selectedImageURL && (
+                        <div className={styles.selected_image_preview}>
+                            {/* Hiển thị hình ảnh đã chọn */}
+                            <img src={selectedImageURL} alt="Selected Image" style={{ maxHeight: `${maxImageHeight}px` }} />
+                        </div>
+                    )}
+
+                    <input type="file" accept="image/*" id="image_upload" onChange={handleImageChange} style={{ display: 'none' }} />
                     <label for="image_upload" className={styles.upload_image_button}>Thêm hình ảnh</label>
+                    {selectedImageURL && (
+                        <label onClick={clearSelectedImage} className={styles.delete_image_button}>Bỏ chọn</label>
+                    )}
                 </div>
                 <button onClick={saveNewPost} >Đăng bài</button>
             </div>
