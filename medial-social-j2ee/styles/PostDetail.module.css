@@ -122,6 +122,7 @@
     height: 32px;
     border-radius: 50%;
     margin-right: 10px;
+    min-width: 32px;
 }
 
 .comment_input {
@@ -183,10 +184,31 @@
 
 .be_the_first {
     display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        font-weight: bold;
-        color: #333;
-        font-family: 'Comic Sans MS', cursive, sans-serif;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.submit_button {
+    display: block;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 5px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.comment_textarea {
+    width: calc(100% - 16px);
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding-top: 5px;
+    outline: none;
+    resize: none;
+    margin-right: 8px;
 }

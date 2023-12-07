@@ -12,6 +12,7 @@ const Post = () => {
     var user = authService.getCurrentUser();
     
     const router = useRouter();
+
     const { postId } = router.query;
 
     const [data, setData] = useState();
@@ -71,6 +72,38 @@ const Post = () => {
         }
     };
 
+    const handleSubmit = async () => {
+        // if (comment.length != "") {
+        //     class Comment {
+        //         constructor(commentId, content, replyFor, userId, postId) {
+        //             this.commentId = commentId;
+        //             this.content = content;
+        //             this.replyFor = replyFor;
+        //             this.userId = userId;
+        //             this.postId = postId;
+        //         }
+        //     }
+
+        //     const cmt = new Comment(null, comment, null, user.id, postId);
+
+        //     await axios.post("http://localhost:8080/comment/savecmt", cmt, { headers: authHeader() })
+        //         .then(response => {
+        //             setComment("");
+        //             notify("Thêm bình luận thành công!");
+        //         })
+        //         .catch(error => {
+        //             // Xử lý lỗi nếu có
+        //             console.error(error);
+        //         });
+        // }
+    };
+
+    const [comment, setComment] = useState('');
+
+    const handleCommentChange = (event) => {
+        setComment(event.target.value);
+    };
+
     return (
         <div className={styles.container}>
             <Image className={styles.close_button} src="/icons/close.png" width="20" height="20"></Image>
@@ -113,7 +146,13 @@ const Post = () => {
                         </div>
                         <div className={styles.comment}>
                             <Image className={styles.comment_user_avt} src={currUserData?.avatar || "/images/avatar.png"} alt="Avatar" width="100" height="100"></Image>
-                            <input ref={commentInputRef} className={styles.comment_input} type="text" placeholder="Viết bình luận..." />
+                            {/* <input ref={commentInputRef} className={styles.comment_input} type="text" placeholder="Viết bình luận..." /> */}
+                            <textarea ref={commentInputRef} className={styles.comment_textarea} value={comment} onChange={handleCommentChange} placeholder="Viết bình luận..." />
+                            {comment.trim() !== '' && ( 
+                                <button onClick={handleSubmit} className={styles.submit_button}>
+                                    Gửi
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
