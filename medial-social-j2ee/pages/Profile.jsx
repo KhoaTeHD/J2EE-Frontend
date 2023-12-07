@@ -62,8 +62,6 @@ const Profile = () => {
             </div>
 
             <div className={styles.posts}>
-                <Post />
-                <Post />
             </div>
         </div >
     )

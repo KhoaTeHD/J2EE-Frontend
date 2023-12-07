@@ -21,6 +21,7 @@ const CreatePost = () => {
             window.location.href = '/Homepage'; // Điều hướng đến trang chủ
         }, waitTime);
     }
+    
     var curentUser = authService.getCurrentUser();
 
     const [user, setUser] = useState();

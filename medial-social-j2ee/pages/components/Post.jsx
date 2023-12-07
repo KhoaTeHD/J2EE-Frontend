@@ -17,6 +17,8 @@ const Post = (props) => {
 
     const [currUserData, setCurrUserData] = useState();
 
+    const [numLikes, setNumLikes] = useState();
+
     useEffect(() => {
         const fetchPostData = async () => {
             const response = await axios.get("http://localhost:8080/post/" + postId, { headers: authHeader() })
@@ -68,21 +70,49 @@ const Post = (props) => {
         setComment(event.target.value);
     };
 
+    const handlesReaction = async () => {
+
+        try {
+            const response = await axios.get("http://localhost:8080/reaction/check", {
+                headers: authHeader(),
+                params: {
+                    userId: currUserData.id,
+                    postId: postData.id,
+                },
+            });
+    
+            const hasLiked = response.data.hasLiked; // Giả sử API trả về thông tin về việc đã like hay chưa
+    
+            if (hasLiked) {
+                // Nếu đã like, gửi yêu cầu HTTP DELETE để xóa like
+                await axios.delete("http://localhost:8080/reaction/delete", {
+                    headers: authHeader(),
+                    data: {
+                        userId: currUserData.id,
+                        postId: postData.id,
+                    },
+                });
+    
+                console.log("Reaction deleted successfully!");
+            } else {
+                // Nếu chưa like, thêm like bằng cách gửi yêu cầu POST
+                const newComment = {
+                    user: currUserData,
+                    post: postData,
+                };
+    
+                await axios.post("http://localhost:8080/reaction/new", newComment, {
+                    headers: authHeader(),
+                });
+    
+                console.log("Reaction added successfully!");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
     const handleSubmit = async () => {
-        // try {
-
-        //     const newComment = {
-        //         userId: user.id,
-        //         postId: postId,
-        //         content: comment
-        //     };
-
-        //     const response = await axios.post('', newComment);
-        //     console.log('Bình luận đã được thêm:', response.data);
-        //     setComment('');
-        // } catch (error) {
-        //     console.error('Lỗi khi thêm bình luận:', error);
-        // }
     };
 
     const isOwner = currUserData && postData && currUserData.id === postData.user.id;
@@ -131,11 +161,11 @@ const Post = (props) => {
                 </div>
             </Link>
             <div className={styles.like_comment}>
-                <span className={styles.like_count}>{postData && postData.likes.length} lượt thích</span>
+                <span className={styles.like_count}>{numLikes} lượt thích</span>
                 <span className={styles.comment_count}>{postData && postData.comments.length} bình luận</span>
             </div>
             <div className={styles.actions}>
-                <Image className={styles.action} src="/icons/post_heart.png" alt="like" width="32" height="32" />
+                <Image className={styles.action} src="/icons/post_heart.png" alt="like" width="32" height="32" onClick={handlesReaction}/>
 
                 <Link href={`/posts/${postId}`}>
                     <Image className={styles.action} src="/icons/post_comment.png" alt="comment" width="32" height="32" />

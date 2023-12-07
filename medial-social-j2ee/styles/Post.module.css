@@ -149,7 +149,7 @@
 }
 
 .submit_button {
-    display: none;
+    display: block;
     bottom: 0;
     right: 0;
     margin-bottom: 5px;
