@@ -6,6 +6,8 @@ import authHeader from "../api/auth-header";
 import authService from '../api/auth-service';
 import React from 'react';
 import Link from "next/link";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Post = (props) => {
 
@@ -17,7 +19,11 @@ const Post = (props) => {
 
     const [currUserData, setCurrUserData] = useState();
 
+<<<<<<< HEAD
     const [numLikes, setNumLikes] = useState();
+=======
+    const notify = (message) => toast.success(message);
+>>>>>>> fea664d1c141a2cb9e6b694cd8d1deddd71e213d
 
     useEffect(() => {
         const fetchPostData = async () => {
@@ -113,9 +119,49 @@ const Post = (props) => {
     }
 
     const handleSubmit = async () => {
+<<<<<<< HEAD
+=======
+        // try {
+
+        //     const newComment = {
+        //         userId: user.id,
+        //         postId: postId,
+        //         content: comment
+        //     };
+
+        //     const response = await axios.post('', newComment);
+        //     console.log('Bình luận đã được thêm:', response.data);
+        //     setComment('');
+        // } catch (error) {
+        //     console.error('Lỗi khi thêm bình luận:', error);
+        // }
+        if (comment.length != "") {
+            class Comment {
+                constructor(commentId, content, replyFor, userId, postId) {
+                    this.commentId = commentId;
+                    this.content = content;
+                    this.replyFor = replyFor;
+                    this.userId = userId;
+                    this.postId = postId;
+                }
+            }
+
+            const cmt = new Comment(null, comment, null, user.id, postId);
+
+            await axios.post("http://localhost:8080/comment/savecmt", cmt, { headers: authHeader() })
+                .then(response => {
+                    setComment("");
+                    notify("Thêm bình luận thành công!");
+                })
+                .catch(error => {
+                    // Xử lý lỗi nếu có
+                    console.error(error);
+                });
+        }
+>>>>>>> fea664d1c141a2cb9e6b694cd8d1deddd71e213d
     };
 
-    const isOwner = currUserData && postData && currUserData.id === postData.user.id;
+    const isOwner = currUserData && postData && currUserData.id === postData?.user?.id;
 
     const [showOptions, setShowOptions] = useState(false);
 
@@ -137,32 +183,38 @@ const Post = (props) => {
 
     return (
         <div className={styles.container}>
+            <ToastContainer />
             <div className={styles.top_container}>
                 <div className={styles.user}>
                     <Image className={styles.user_avt} src={avtSrcPostUser} alt="Avatar" width="100" height="100"></Image>
-                    <span className={styles.user_name}>{postData && postData.user.profileName}</span>
+                    <span className={styles.user_name}>{postData && postData.user && postData.user.profileName}</span>
                     <span className={styles.dot1}>•</span>
                     <span className={styles.time_since_post}>{time}</span>
                 </div>
                 {isOwner && (
                     <div className={styles.options} onClick={toggleOptions}>
-                    <span className={styles.options_icon}>...</span>
-                    {/* {showOptions && (
-                        
+                        <span className={styles.options_icon}>...</span>
+                        {/* {showOptions && (
+
                     )} */}
-                </div>
+                    </div>
                 )}
             </div>
 
             <p className={styles.post_caption}>{postData && postData.caption}</p>
             <Link href={`/posts/${postId}`}>
                 <div className={styles.post}>
-                    <Image className={styles.post_image} src={postData && postData.media.length === 1 && postData.media[0].path} width="1000" height="1000"></Image>
+                    <Image className={styles.post_image} src={postData && postData.media && postData.media.length === 1 && postData.media[0].path} width="1000" height="1000"></Image>
                 </div>
             </Link>
             <div className={styles.like_comment}>
+<<<<<<< HEAD
                 <span className={styles.like_count}>{numLikes} lượt thích</span>
                 <span className={styles.comment_count}>{postData && postData.comments.length} bình luận</span>
+=======
+                <span className={styles.like_count}>{postData && postData.likes && postData.likes.length} lượt thích</span>
+                <span className={styles.comment_count}>{postData && postData.comments && postData.comments.length} bình luận</span>
+>>>>>>> fea664d1c141a2cb9e6b694cd8d1deddd71e213d
             </div>
             <div className={styles.actions}>
                 <Image className={styles.action} src="/icons/post_heart.png" alt="like" width="32" height="32" onClick={handlesReaction}/>
