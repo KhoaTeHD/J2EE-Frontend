@@ -6,8 +6,12 @@ import authHeader from "./api/auth-header";
 import authService from './api/auth-service';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Edit_Profile = () => {
+
+    const notify = (message) => toast.success(message);
 
     var user = authService.getCurrentUser();
 
@@ -124,26 +128,26 @@ const Edit_Profile = () => {
 
 
         if (valid == 1 && confirm("Bạn có chắc chắn muốn cập nhật các thông tin của người dùng này vào cơ sở dữ liệu?")) {
-            
+
             var avtnew = "";
-            
-            if(selectedFile !== undefined){
+
+            if (selectedFile !== undefined) {
                 const formData = new FormData();
                 formData.append('image', selectedFile);
-                
+
                 //console.log(data.avatar);
 
-                if(data.avatar != null){
-                    await axios.post("http://localhost:8080/cloudinary/delete?url=" +data.avatar, { headers: authHeader() })
-                    .then(response => {
-                        //console.log(response.data);
-                    })
-                    .catch(error => {
-                        // Xử lý lỗi nếu có
-                        console.error(error);
-                    });
+                if (data.avatar != null) {
+                    await axios.post("http://localhost:8080/cloudinary/delete?url=" + data.avatar, { headers: authHeader() })
+                        .then(response => {
+                            //console.log(response.data);
+                        })
+                        .catch(error => {
+                            // Xử lý lỗi nếu có
+                            console.error(error);
+                        });
                 }
-    
+
                 await axios.post("http://localhost:8080/cloudinary/upload", formData, { headers: authHeader() })
                     .then(response => {
                         avtnew = response.data.url;
@@ -154,7 +158,7 @@ const Edit_Profile = () => {
                         // Xử lý lỗi nếu có
                         console.error(error);
                     });
-                }
+            }
 
             //console.log(avtnew);
             class User {
@@ -167,18 +171,18 @@ const Edit_Profile = () => {
                     this.avatar = avatar;
                 }
             }
-            const updateUser = new User(data.userId, profileName.trim(), birthday, biography.trim(), gender, avtnew !="" ? avtnew : avatar);
+            const updateUser = new User(data.userId, profileName.trim(), birthday, biography.trim(), gender, avtnew != "" ? avtnew : avatar);
 
             await axios.post("http://localhost:8080/api/userProfile/updateProfile/" + user.id, updateUser, { headers: authHeader() })
-            .then(response => {
-                // Xử lý phản hồi từ API nếu cần
-                alert('Cập nhật thành công');
+                .then(response => {
+                    // Xử lý phản hồi từ API nếu cần
+                    notify('Cập nhật thành công');
 
-            })
-            .catch(error => {
-                // Xử lý lỗi nếu có
-                alert('Lỗi khi cập nhật');
-            });
+                })
+                .catch(error => {
+                    // Xử lý lỗi nếu có
+                    alert('Lỗi khi cập nhật');
+                });
         }
 
     }
@@ -193,6 +197,8 @@ const Edit_Profile = () => {
                 }                
             `}</style>
             <OptionProfile />
+
+            <ToastContainer />
 
             <div className={styles.right}>
                 <p className={styles.right_heading}>Sửa trang cá nhân</p>

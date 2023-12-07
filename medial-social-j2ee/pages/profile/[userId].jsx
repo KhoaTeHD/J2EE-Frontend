@@ -1,27 +1,27 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import styles from '@/styles/Profile.module.css';
-import Post from "./components/Post";
-import authHeader from "./api/auth-header";
-import authService from './api/auth-service';
+import authHeader from "../api/auth-header";
+import Post from "../components/Post";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const Profile = () => {
-    var user = authService.getCurrentUser();
 
     const [data, setData1] = useState([]);
     const [num_friends, setData2] = useState([]);
     const [num_posts, setData3] = useState([]);
+    const router = useRouter();
+    const { userId } = router.query;
 
     useEffect(() => {
         const fetchData = async () => {
-            const response1 = await axios.get("http://localhost:8080/api/userProfile/id/" + user.id, { headers: authHeader() })
+            const response1 = await axios.get("http://localhost:8080/api/userProfile/id/" + userId, { headers: authHeader() })
             setData1(response1.data);
-            const response2 = await axios.get("http://localhost:8080/api/userProfile/numFriends/" + user.id, { headers: authHeader() })
+            const response2 = await axios.get("http://localhost:8080/api/userProfile/numFriends/" + userId, { headers: authHeader() })
             setData2(response2.data);
-            const response3 = await axios.get("http://localhost:8080/api/userProfile/numPost/" + user.id, { headers: authHeader() })
+            const response3 = await axios.get("http://localhost:8080/api/userProfile/numPost/" + userId, { headers: authHeader() })
             setData3(response3.data);
         };
         fetchData();
