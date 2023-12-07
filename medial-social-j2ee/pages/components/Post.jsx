@@ -19,11 +19,9 @@ const Post = (props) => {
 
     const [currUserData, setCurrUserData] = useState();
 
-<<<<<<< HEAD
     const [numLikes, setNumLikes] = useState();
-=======
+
     const notify = (message) => toast.success(message);
->>>>>>> fea664d1c141a2cb9e6b694cd8d1deddd71e213d
 
     useEffect(() => {
         const fetchPostData = async () => {
@@ -86,9 +84,9 @@ const Post = (props) => {
                     postId: postData.id,
                 },
             });
-    
+
             const hasLiked = response.data.hasLiked; // Giả sử API trả về thông tin về việc đã like hay chưa
-    
+
             if (hasLiked) {
                 // Nếu đã like, gửi yêu cầu HTTP DELETE để xóa like
                 await axios.delete("http://localhost:8080/reaction/delete", {
@@ -98,7 +96,7 @@ const Post = (props) => {
                         postId: postData.id,
                     },
                 });
-    
+
                 console.log("Reaction deleted successfully!");
             } else {
                 // Nếu chưa like, thêm like bằng cách gửi yêu cầu POST
@@ -106,11 +104,11 @@ const Post = (props) => {
                     user: currUserData,
                     post: postData,
                 };
-    
+
                 await axios.post("http://localhost:8080/reaction/new", newComment, {
                     headers: authHeader(),
                 });
-    
+
                 console.log("Reaction added successfully!");
             }
         } catch (error) {
@@ -119,22 +117,6 @@ const Post = (props) => {
     }
 
     const handleSubmit = async () => {
-<<<<<<< HEAD
-=======
-        // try {
-
-        //     const newComment = {
-        //         userId: user.id,
-        //         postId: postId,
-        //         content: comment
-        //     };
-
-        //     const response = await axios.post('', newComment);
-        //     console.log('Bình luận đã được thêm:', response.data);
-        //     setComment('');
-        // } catch (error) {
-        //     console.error('Lỗi khi thêm bình luận:', error);
-        // }
         if (comment.length != "") {
             class Comment {
                 constructor(commentId, content, replyFor, userId, postId) {
@@ -158,7 +140,6 @@ const Post = (props) => {
                     console.error(error);
                 });
         }
->>>>>>> fea664d1c141a2cb9e6b694cd8d1deddd71e213d
     };
 
     const isOwner = currUserData && postData && currUserData.id === postData?.user?.id;
@@ -195,7 +176,7 @@ const Post = (props) => {
                     <div className={styles.options} onClick={toggleOptions}>
                         <span className={styles.options_icon}>...</span>
                         {/* {showOptions && (
-
+                        
                     )} */}
                     </div>
                 )}
@@ -208,16 +189,14 @@ const Post = (props) => {
                 </div>
             </Link>
             <div className={styles.like_comment}>
-<<<<<<< HEAD
-                <span className={styles.like_count}>{numLikes} lượt thích</span>
-                <span className={styles.comment_count}>{postData && postData.comments.length} bình luận</span>
-=======
+
+
                 <span className={styles.like_count}>{postData && postData.likes && postData.likes.length} lượt thích</span>
                 <span className={styles.comment_count}>{postData && postData.comments && postData.comments.length} bình luận</span>
->>>>>>> fea664d1c141a2cb9e6b694cd8d1deddd71e213d
+
             </div>
             <div className={styles.actions}>
-                <Image className={styles.action} src="/icons/post_heart.png" alt="like" width="32" height="32" onClick={handlesReaction}/>
+                <Image className={styles.action} src="/icons/post_heart.png" alt="like" width="32" height="32" onClick={handlesReaction} />
 
                 <Link href={`/posts/${postId}`}>
                     <Image className={styles.action} src="/icons/post_comment.png" alt="comment" width="32" height="32" />
