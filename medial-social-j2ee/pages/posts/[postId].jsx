@@ -69,7 +69,7 @@ const Post = () => {
             <Image className={styles.close_button} src="/icons/close.png" width="20" height="20"></Image>
             <div className={styles.post_container}>
                 <div className={styles.post}>
-                    <Image className={styles.post_image} src="/images/test_post_img.jpg" width="1000" height="1000"></Image>
+                    <Image className={styles.post_image} src={data && data.media && data.media[0].path} width="1000" height="1000"></Image>
                 </div>
                 <div className={styles.left_img}>
                     <div className={styles.user}>

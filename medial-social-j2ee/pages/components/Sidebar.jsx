@@ -54,7 +54,7 @@ const Sidebar = () => {
                         <Image className={styles.icon} src="/icons/icons8-search-64.png" alt="" width="40" height="40" />
                         <p className={styles.text} id='search' >Tìm kiếm</p>
                     </button>
-                    <Link className={styles.list_item} href={"/home"}>
+                    <Link className={styles.list_item} href={"/CreatePost"}>
                         <Image className={styles.icon} src="/icons/icons8-add-64.png" alt="" width="40" height="40" />
                         <p className={styles.text}>Tạo bài viết</p>
                     </Link>

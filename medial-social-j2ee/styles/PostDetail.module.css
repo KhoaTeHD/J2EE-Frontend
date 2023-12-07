@@ -25,6 +25,7 @@
     transform: translateX(-50%);
     display: inline-flex;
     border-radius: 9px;
+    min-width: 80%;
 }
 
 .user {
@@ -77,6 +78,7 @@
     background-color: white;
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
+    /* min-width: 100%; */
 }
 
 .post_image {

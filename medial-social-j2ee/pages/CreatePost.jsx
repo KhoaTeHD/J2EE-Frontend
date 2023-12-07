@@ -13,7 +13,8 @@ const CreatePost = () => {
 
     const [user, setUser] = useState();
 
-    const [selectedImages, setSelectedImages] = useState([]);
+    //const [selectedImages, setSelectedImages] = useState([]);
+    const [selectedImage, setSelectedImage] = useState();
 
     const [showNotification, setShowNotification] = useState(false);
 
@@ -32,22 +33,27 @@ const CreatePost = () => {
     }, []);
 
     const handleImageChange = (event) => {
-        const files = event.target.files;
-        const imagesArray = [];
+        // const files = event.target.files;
+        // const imagesArray = [];
 
-        for (let i = 0; i < files.length; i++) {
-            const reader = new FileReader();
+        // for (let i = 0; i < files.length; i++) {
+        //     const reader = new FileReader();
 
-            reader.onload = (e) => {
-                imagesArray.push(e.target.result);
+        //     reader.onload = (e) => {
+        //         imagesArray.push(e.target.result);
 
-                if (imagesArray.length === files.length) {
-                    setSelectedImages([...selectedImages, ...imagesArray]);
-                }
-            };
+        //         if (imagesArray.length === files.length) {
+        //             setSelectedImages([...selectedImages, ...imagesArray]);
+        //         }
+        //     };
 
-            reader.readAsDataURL(files[i]);
-        }
+        //     reader.readAsDataURL(files[i]);
+        // }
+
+        const file = event.target.files[0];
+        console.log(file);
+        setSelectedImage(file);
+
     };
 
     const [text, setText] = useState('');
@@ -60,21 +66,51 @@ const CreatePost = () => {
 
     const formattedDate = format(currentDate, 'yyyy-MM-dd HH:mm:ss');
 
-    const saveNewPost = () => {
+    const saveNewPost = async() => {
+
+        const media = {
+            path: "",
+            type: "Image",
+            postid: ""
+        };
+
         const post = {
             user: user,
             caption: text,
-            createdDate: formattedDate
+            createdDate: formattedDate,
         };
 
-        axios.post('http://localhost:8080/post/newpost', post, { headers: authHeader() })
+        const formData = new FormData();
+        formData.append('image', selectedImage);
+        
+        await axios.post("http://localhost:8080/cloudinary/upload", formData, { headers: authHeader() })
+            .then(response => {
+                media.path = response.data.url;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        await axios.post('http://localhost:8080/post/newpost', post, { headers: authHeader() })
             .then(response => {
                 console.log('Bài viết đã được thêm:', response.data);
+                media.postid = response.data;
+            })
+            .catch(error => {
+                console.error('Lỗi khi thêm bài viết:', error);
+            });
+
+        console.log(media);
+
+        await axios.post('http://localhost:8080/media/newmedia', media, { headers: authHeader() })
+            .then(response => {
                 setShowNotification(true);
             })
             .catch(error => {
                 console.error('Lỗi khi thêm bài viết:', error);
             });
+
+        
     };
 
     return (
@@ -102,15 +138,15 @@ const CreatePost = () => {
 
                     <textarea className={styles.post_caption} value={text} onChange={handleInputChange} placeholder='Bạn đang nghĩ gì ?'></textarea>
 
-                    {selectedImages.length > 0 && (
+                    {/* {selectedImages.length > 0 && (
                         <div className="selected_image_container">
                             {selectedImages.map((image, index) => (
                                 <img key={index} src={image} alt={`Selected ${index}`} />
                             ))}
                         </div>
-                    )}
+                    )} */}
 
-                    <input type="file" accept="image/*" id="image_upload" onChange={handleImageChange} style={{ display: 'none' }} />
+                    <input type="file" accept="image/*" id="image_upload" onChange={handleImageChange} /*style={{ display: 'none' }}*/ />
                     <label for="image_upload" className={styles.upload_image_button}>Thêm hình ảnh</label>
                 </div>
                 <button onClick={saveNewPost} >Đăng bài</button>

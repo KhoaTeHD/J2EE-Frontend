@@ -44,6 +44,8 @@
     color: #06252d;
     margin-left: 10px;
     margin-right: 10px;
+    word-wrap: break-word; /* hoặc overflow-wrap: break-word; */
+    white-space: pre-wrap;
 }
 
 .post {

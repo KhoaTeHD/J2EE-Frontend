@@ -95,7 +95,7 @@ const Post = (props) => {
             <p className={styles.post_caption}>{postData && postData.caption}</p>
             <Link href={`/posts/${postId}`}>
                 <div className={styles.post}>
-                    <Image className={styles.post_image} src="/images/test_post_img.jpg" width="1000" height="1000"></Image>
+                    <Image className={styles.post_image} src={postData && postData.media.length === 1 && postData.media[0].path} width="1000" height="1000"></Image>
                 </div>
             </Link>
             <div className={styles.like_comment}>
