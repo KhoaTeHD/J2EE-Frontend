@@ -6,6 +6,8 @@ import authHeader from "../api/auth-header";
 import authService from '../api/auth-service';
 import React from 'react';
 import Link from "next/link";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Post = (props) => {
 
@@ -16,6 +18,10 @@ const Post = (props) => {
     const [postData, setPostData] = useState();
 
     const [currUserData, setCurrUserData] = useState();
+
+    const [numLikes, setNumLikes] = useState();
+
+    const notify = (message) => toast.success(message);
 
     useEffect(() => {
         const fetchPostData = async () => {
@@ -68,24 +74,75 @@ const Post = (props) => {
         setComment(event.target.value);
     };
 
+    const handlesReaction = async () => {
+
+        try {
+            const response = await axios.get("http://localhost:8080/reaction/check", {
+                headers: authHeader(),
+                params: {
+                    userId: currUserData.id,
+                    postId: postData.id,
+                },
+            });
+
+            const hasLiked = response.data.hasLiked; // Giả sử API trả về thông tin về việc đã like hay chưa
+
+            if (hasLiked) {
+                // Nếu đã like, gửi yêu cầu HTTP DELETE để xóa like
+                await axios.delete("http://localhost:8080/reaction/delete", {
+                    headers: authHeader(),
+                    data: {
+                        userId: currUserData.id,
+                        postId: postData.id,
+                    },
+                });
+
+                console.log("Reaction deleted successfully!");
+            } else {
+                // Nếu chưa like, thêm like bằng cách gửi yêu cầu POST
+                const newComment = {
+                    user: currUserData,
+                    post: postData,
+                };
+
+                await axios.post("http://localhost:8080/reaction/new", newComment, {
+                    headers: authHeader(),
+                });
+
+                console.log("Reaction added successfully!");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
     const handleSubmit = async () => {
-        // try {
+        if (comment.length != "") {
+            class Comment {
+                constructor(commentId, content, replyFor, userId, postId) {
+                    this.commentId = commentId;
+                    this.content = content;
+                    this.replyFor = replyFor;
+                    this.userId = userId;
+                    this.postId = postId;
+                }
+            }
 
-        //     const newComment = {
-        //         userId: user.id,
-        //         postId: postId,
-        //         content: comment
-        //     };
+            const cmt = new Comment(null, comment, null, user.id, postId);
 
-        //     const response = await axios.post('', newComment);
-        //     console.log('Bình luận đã được thêm:', response.data);
-        //     setComment('');
-        // } catch (error) {
-        //     console.error('Lỗi khi thêm bình luận:', error);
-        // }
+            await axios.post("http://localhost:8080/comment/savecmt", cmt, { headers: authHeader() })
+                .then(response => {
+                    setComment("");
+                    notify("Thêm bình luận thành công!");
+                })
+                .catch(error => {
+                    // Xử lý lỗi nếu có
+                    console.error(error);
+                });
+        }
     };
 
-    const isOwner = currUserData && postData && currUserData.id === postData.user.id;
+    const isOwner = currUserData && postData && currUserData.id === postData?.user?.id;
 
     const [showOptions, setShowOptions] = useState(false);
 
@@ -107,35 +164,39 @@ const Post = (props) => {
 
     return (
         <div className={styles.container}>
+            <ToastContainer />
             <div className={styles.top_container}>
                 <div className={styles.user}>
                     <Image className={styles.user_avt} src={avtSrcPostUser} alt="Avatar" width="100" height="100"></Image>
-                    <span className={styles.user_name}>{postData && postData.user.profileName}</span>
+                    <span className={styles.user_name}>{postData && postData.user && postData.user.profileName}</span>
                     <span className={styles.dot1}>•</span>
                     <span className={styles.time_since_post}>{time}</span>
                 </div>
                 {isOwner && (
                     <div className={styles.options} onClick={toggleOptions}>
-                    <span className={styles.options_icon}>...</span>
-                    {/* {showOptions && (
+                        <span className={styles.options_icon}>...</span>
+                        {/* {showOptions && (
                         
                     )} */}
-                </div>
+                    </div>
                 )}
             </div>
 
             <p className={styles.post_caption}>{postData && postData.caption}</p>
             <Link href={`/posts/${postId}`}>
                 <div className={styles.post}>
-                    <Image className={styles.post_image} src={postData && postData.media.length === 1 && postData.media[0].path} width="1000" height="1000"></Image>
+                    <Image className={styles.post_image} src={postData && postData.media && postData.media.length === 1 && postData.media[0].path} width="1000" height="1000"></Image>
                 </div>
             </Link>
             <div className={styles.like_comment}>
-                <span className={styles.like_count}>{postData && postData.likes.length} lượt thích</span>
-                <span className={styles.comment_count}>{postData && postData.comments.length} bình luận</span>
+
+
+                <span className={styles.like_count}>{postData && postData.likes && postData.likes.length} lượt thích</span>
+                <span className={styles.comment_count}>{postData && postData.comments && postData.comments.length} bình luận</span>
+
             </div>
             <div className={styles.actions}>
-                <Image className={styles.action} src="/icons/post_heart.png" alt="like" width="32" height="32" />
+                <Image className={styles.action} src="/icons/post_heart.png" alt="like" width="32" height="32" onClick={handlesReaction} />
 
                 <Link href={`/posts/${postId}`}>
                     <Image className={styles.action} src="/icons/post_comment.png" alt="comment" width="32" height="32" />
