@@ -46,7 +46,7 @@ const Post = () => {
 
         fetchData();
         fetchCurrUserData();
-    }, [key]);
+    }, [key, postId, currUserData]);
 
 
     function timeSincePost(postTime) {
