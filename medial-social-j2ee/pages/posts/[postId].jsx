@@ -20,9 +20,17 @@ const Post = () => {
     const [currUserData, setCurrUserData] = useState();
 
     useEffect(() => {
+    
         const fetchData = async () => {
-            const response = await axios.get("http://localhost:8080/post/" + postId, { headers: authHeader() })
-            setData(response.data);
+            if (postId) { // Kiểm tra xem postId có tồn tại không trước khi gọi API
+                try {
+                    const response = await axios.get(`http://localhost:8080/post/${postId}`, { headers: authHeader() });
+                    setData(response.data);
+                } catch (error) {
+                    // Xử lý lỗi khi gọi API
+                    console.error('Error fetching data:', error);
+                }
+            }
         };
         const fetchCurrUserData = async () => {
             const response = await axios.get("http://localhost:8080/api/users/id/" + user.id, { headers: authHeader() })
@@ -31,7 +39,7 @@ const Post = () => {
 
         fetchData();
         fetchCurrUserData();
-    }, []);
+    }, [postId, currUserData]);
 
 
     function timeSincePost(postTime) {

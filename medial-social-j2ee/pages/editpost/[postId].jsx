@@ -2,14 +2,18 @@ import styles from '@/styles/CreatePost.module.css'
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import authHeader from "./api/auth-header";
-import authService from './api/auth-service';
+import authHeader from '../api/auth-header';
+import authService from '../api/auth-service';
 import { format } from 'date-fns';
-import SavePostSuccessPopup from './components/SavePostSuccessPopup';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/router';
 
-const CreatePost = () => {
+const EditPost = () => {
+
+    const router = useRouter();
+
+    const { postId } = router.query;
 
     const waitTime = 1500;
 
@@ -18,7 +22,8 @@ const CreatePost = () => {
     const notifySuccess = (message) => {
         toast.success(message, { autoClose: waitTime });
         setTimeout(() => {
-            window.location.href = '/Homepage'; // Điều hướng đến trang chủ
+            //window.location.href = '/Homepage'; // Điều hướng đến trang chủ
+            window.history.back();
         }, waitTime);
     }
     
@@ -35,6 +40,20 @@ const CreatePost = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const [selectedMediaType, setSelectedMediaType] = useState('');
+
+    const [windowHeight, setWindowHeight] = useState();
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowHeight(window.innerHeight);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -140,20 +159,6 @@ const CreatePost = () => {
 
     };
 
-    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setWindowHeight(window.innerHeight);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
     // Tính toán chiều cao tối đa của hình ảnh
     const maxImageHeight = windowHeight * 0.55;
 
@@ -179,7 +184,7 @@ const CreatePost = () => {
                 </div>
                 <div className={styles.user}>
                     <Image className={styles.user_avt} src={user?.avatar || "/images/avatar.png"} width="100" height="100"></Image>
-                    <span className={styles.user_name}>{curentUser.profileName}</span>
+                    <span className={styles.user_name}>{curentUser && curentUser.profileName}</span>
                 </div>
                 <div className={styles.post_content}>
                     {/* <p className={styles.pots_caption} contenteditable="true" onFocus={handleFocus} onBlur={handleBlur} onInput={handleChange}>{content}</p> */}
@@ -225,4 +230,4 @@ const CreatePost = () => {
     );
 }
 
-export default CreatePost
+export default EditPost

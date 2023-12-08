@@ -2,12 +2,15 @@ import styles from '@/styles/Post.module.css'
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import authHeader from "../api/auth-header";
+import authHeader from '../api/auth-header';
 import authService from '../api/auth-service';
 import React from 'react';
 import Link from "next/link";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { set } from 'date-fns';
+import { button } from 'react-validation/build/button';
+import ConfirmationDialog from './ConfirmationDialog';
 
 const Post = (props) => {
 
@@ -21,12 +24,20 @@ const Post = (props) => {
 
     const [numLikes, setNumLikes] = useState();
 
+    const notifyDelete = (message) => toast.success(message, {autoClose: 400});
+
     const notify = (message) => toast.success(message);
+
+    const [liked, setLiked] = useState(false);
+
+    const [dependency, setDependency] = useState(0);
 
     useEffect(() => {
         const fetchPostData = async () => {
             const response = await axios.get("http://localhost:8080/post/" + postId, { headers: authHeader() })
             setPostData(response.data);
+            const numL = response.data?.likes?.length;
+            setNumLikes(numL);
         };
 
         const fetchCurrUserData = async () => {
@@ -34,9 +45,22 @@ const Post = (props) => {
             setCurrUserData(response.data);
         };
 
+        const fetchLikedData = async () => {
+            const response = await axios.get("http://localhost:8080/reaction/check", {
+                headers: authHeader(),
+                params: {
+                    userId: user.id,
+                    postId: postId,
+                },
+            });
+
+            setLiked(response.data);
+        };
+
         fetchPostData();
         fetchCurrUserData();
-    }, []);
+        fetchLikedData();
+    }, [dependency]);
 
     function timeSincePost(postTime) {
         const postDate = new Date(postTime);
@@ -80,39 +104,35 @@ const Post = (props) => {
             const response = await axios.get("http://localhost:8080/reaction/check", {
                 headers: authHeader(),
                 params: {
-                    userId: currUserData.id,
-                    postId: postData.id,
+                    userId: user.id,
+                    postId: postId,
                 },
             });
 
-            const hasLiked = response.data.hasLiked; // Giả sử API trả về thông tin về việc đã like hay chưa
+            const hasLiked = response.data;
 
             if (hasLiked) {
-                // Nếu đã like, gửi yêu cầu HTTP DELETE để xóa like
+
                 await axios.delete("http://localhost:8080/reaction/delete", {
                     headers: authHeader(),
-                    data: {
-                        userId: currUserData.id,
-                        postId: postData.id,
+                    params: {
+                        userId: user.id,
+                        postId: postId,
                     },
                 });
-
                 console.log("Reaction deleted successfully!");
+
             } else {
-                // Nếu chưa like, thêm like bằng cách gửi yêu cầu POST
                 const newComment = {
                     user: currUserData,
                     post: postData,
                 };
-
-                await axios.post("http://localhost:8080/reaction/new", newComment, {
-                    headers: authHeader(),
-                });
-
-                console.log("Reaction added successfully!");
+                await axios.post("http://localhost:8080/reaction/new", newComment, { headers: authHeader() });
             }
-        } catch (error) {
-            console.error("Error:", error);
+            setDependency(prevDependency => prevDependency + 1);
+        }
+        catch (error) {
+            console.error(error);
         }
     }
 
@@ -139,10 +159,12 @@ const Post = (props) => {
                     // Xử lý lỗi nếu có
                     console.error(error);
                 });
+
+            setDependency(prevDependency => prevDependency + 1);
         }
     };
 
-    const isOwner = currUserData && postData && currUserData.id === postData?.user?.id;
+    const isOwner = currUserData && postData && postData.user && currUserData.id === postData.user.id;
 
     const [showOptions, setShowOptions] = useState(false);
 
@@ -154,17 +176,60 @@ const Post = (props) => {
         // Xử lý chức năng chỉnh sửa bài viết ở đây
     };
 
+    const [showConfirmation, setShowConfirmation] = useState(false);
+
+    const handleCancelDelete = () => {
+        setShowConfirmation(false);
+        setShowOptions(false);
+    }
+
+    const handleConfirmDelete = async () => {
+        await axios.delete("http://localhost:8080/post/" + postId, { headers: authHeader() })
+            .then(response => {
+                setShowConfirmation(false);
+                setShowOptions(false);
+                notifyDelete("Xóa bài viết thành công!");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
     const handleDelete = () => {
-        // Xử lý chức năng xóa bài viết ở đây
+        setShowOptions(false);
+        setShowConfirmation(true);
+
     };
 
     const avtSrcPostUser = postData?.user?.avatar || "/images/avatar.png";
     const avtSrcCurrUser = currUserData?.avatar || "/images/avatar.png";
+    const iconLikeSrc = liked ? '/icons/post_ping_heart.png' : '/icons/post_heart.png';
     //const 
 
     return (
         <div className={styles.container}>
             <ToastContainer />
+            {showConfirmation && (
+                <ConfirmationDialog
+                    message="Bạn có chắc chắn muốn xóa?"
+                    onConfirm={handleConfirmDelete}
+                    onCancel={handleCancelDelete}
+                />
+            )}
+            {showOptions && (
+                <div className={styles.overlay}>
+                    <div className={styles.options_container}>
+                        <span className={styles.delete_option} onClick={handleDelete} >Xóa</span>
+                        <Link className={styles.link} href={`/editpost/${postId}`}>
+                            <span className={styles.edit_option}>Sửa</span>
+                        </Link>
+                        <span className={styles.cancel_option} onClick={toggleOptions} >Hoàn tác</span>
+                    </div>
+                </div>
+            )}
             <div className={styles.top_container}>
                 <div className={styles.user}>
                     <Image className={styles.user_avt} src={avtSrcPostUser} alt="Avatar" width="100" height="100"></Image>
@@ -175,9 +240,6 @@ const Post = (props) => {
                 {isOwner && (
                     <div className={styles.options} onClick={toggleOptions}>
                         <span className={styles.options_icon}>...</span>
-                        {/* {showOptions && (
-                        
-                    )} */}
                     </div>
                 )}
             </div>
@@ -191,12 +253,13 @@ const Post = (props) => {
             <div className={styles.like_comment}>
 
 
-                <span className={styles.like_count}>{postData && postData.likes && postData.likes.length} lượt thích</span>
+                {/* <span className={styles.like_count}>{postData && postData.likes && postData.likes.length} lượt thích</span> */}
+                <span className={styles.like_count}>{numLikes} lượt thích</span>
                 <span className={styles.comment_count}>{postData && postData.comments && postData.comments.length} bình luận</span>
 
             </div>
             <div className={styles.actions}>
-                <Image className={styles.action} src="/icons/post_heart.png" alt="like" width="32" height="32" onClick={handlesReaction} />
+                <Image className={styles.action} src={iconLikeSrc} alt="like" width="32" height="32" onClick={handlesReaction} />
 
                 <Link href={`/posts/${postId}`}>
                     <Image className={styles.action} src="/icons/post_comment.png" alt="comment" width="32" height="32" />

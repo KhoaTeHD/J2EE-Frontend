@@ -224,3 +224,40 @@
     display: inline-block;
     margin-left: 10px;;
 }
+
+.selected_media_preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%; 
+    margin-top: 20px; 
+    margin-bottom: 15px;
+}
+
+.selected_media_preview img,
+.selected_media_preview video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.delete_media_button {
+    padding: 8px 16px;
+    background-color: rgb(247, 105, 105);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.selected_video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
