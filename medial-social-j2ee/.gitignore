@@ -35,7 +35,7 @@ yarn-error.log*
 next-env.d.ts
 
 # chatbox
-/pages/Chatbox.jsx
-public/css/chatbox.css
-public/css/chatbox.css.map
-public/css/chatbox.scss
+# /pages/Chatbox.jsx
+# public/css/chatbox.css
+# public/css/chatbox.css.map
+# public/css/chatbox.scss
