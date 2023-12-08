@@ -24,7 +24,7 @@ const Post = (props) => {
 
     const [numLikes, setNumLikes] = useState();
 
-    const notifyDelete = (message) => toast.success(message, {autoClose: 400});
+    const notifyDelete = (message) => toast.success(message, { autoClose: 400 });
 
     const notify = (message) => toast.success(message);
 
@@ -208,6 +208,7 @@ const Post = (props) => {
     const avtSrcCurrUser = currUserData?.avatar || "/images/avatar.png";
     const iconLikeSrc = liked ? '/icons/post_ping_heart.png' : '/icons/post_heart.png';
     //const 
+    const isImage = postData && postData.media && postData.media.length === 1 && postData.media[0].type === "Image";
 
     return (
         <div className={styles.container}>
@@ -245,11 +246,34 @@ const Post = (props) => {
             </div>
 
             <p className={styles.post_caption}>{postData && postData.caption}</p>
-            <Link href={`/posts/${postId}`}>
+
+            {/* <Link href={`/posts/${postId}`}>
                 <div className={styles.post}>
                     <Image className={styles.post_image} src={postData && postData.media && postData.media.length === 1 && postData.media[0].path} width="1000" height="1000"></Image>
                 </div>
-            </Link>
+            </Link> */}
+            <div className={styles.post}>
+                {isImage ? (
+                    <Link href={`/posts/${postId}`}>
+                        <Image
+                            className={styles.post_image}
+                            src={postData && postData.media && postData.media.length === 1 && postData.media[0].path}
+                            width={1000}
+                            height={1000}
+                        />
+                    </Link>
+                ) : (
+                    <video className={styles.post_video} controls>
+                        <source
+                            src={postData && postData.media && postData.media.length === 1 && postData.media[0].path}
+                            type="video/mp4"
+                        />
+                        Your browser does not support the video tag.
+                    </video>
+                )}
+            </div>
+
+
             <div className={styles.like_comment}>
 
 

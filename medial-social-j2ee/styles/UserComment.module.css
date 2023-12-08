@@ -4,6 +4,13 @@
     background-color: #F6FCFE;
 }
 
+.container_cmt {
+    display: flex;
+    margin-left: 60px;
+    padding: 10px 10px 5px 0px;
+    background-color: #F6FCFE;
+}
+
 .user_avt {
     background-color: #F6FCFE;
 }
@@ -21,6 +28,13 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+.user_name_active {
+    font-weight: 600;
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #ccc;
+}
+
 .user_comment {
     margin-top: 3px;
     font-family: Arial, Helvetica, sans-serif;
@@ -30,10 +44,27 @@
     line-height: 1.2;
 }
 
+.user_comment_active {
+    margin-top: 3px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #333;
+    line-height: 1.2;
+    background-color: #ccc;
+}
+
 .user_name_comment {
     padding: 8px;
     border-radius: 15px;
     border: 1px solid black;
+}
+
+.user_name_comment_active {
+    padding: 8px;
+    border-radius: 15px;
+    border: 1px solid blueviolet;
+    background-color: #ccc;
 }
 
 .user_avt {
@@ -58,4 +89,8 @@
 .action>button:hover {
     opacity: 0.5;
     cursor: pointer;
+}
+
+.container_cmt_outer {
+    background-color: #F6FCFE;
 }

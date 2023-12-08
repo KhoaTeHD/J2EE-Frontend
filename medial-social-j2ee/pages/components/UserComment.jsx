@@ -3,6 +3,7 @@ import Image from 'next/image';
 import AuthService from '../api/auth-service';
 import authHeader from "../api/auth-header";
 import axios from 'axios';
+import { useState, useEffect, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -10,6 +11,7 @@ const UserComment = (props) => {
 
     var user = AuthService.getCurrentUser();
     const notify = (message) => toast.success(message, { autoClose: 500 });
+    const [isClicked, setClick] = useState(false);
 
     const isCurrentUser = (user && props.val.user.userId === user.id) || (user && props.userIdOfPost === user.id);
 
@@ -28,6 +30,7 @@ const UserComment = (props) => {
     const sendDataToPost = () => {
         const data = props.val.commentId;
         props.sendDataToPost(data); // Gọi hàm từ props để gửi dữ liệu lên Post
+        setClick(!isClicked);
     };
 
     return (
@@ -37,9 +40,9 @@ const UserComment = (props) => {
                     <Image className={styles.comment_user_avt} src={props.val?.user?.avatar || "/images/avatar.png"} alt="Avatar" width="100" height="100"></Image>
                 </div>
                 <div className={styles.user_cmt_container}>
-                    <div className={styles.user_name_comment}>
-                        <div className={styles.user_name}>{props.val.user.profileName}</div>
-                        <div className={styles.user_comment}>{props.val.content}</div>
+                    <div className={isClicked && props.isSelected ? styles.user_name_comment_active : styles.user_name_comment}>
+                        <div className={isClicked && props.isSelected ? styles.user_name_active : styles.user_name}>{props.val.user.profileName}</div>
+                        <div className={isClicked && props.isSelected ? styles.user_comment_active : styles.user_comment}>{props.val.content}</div>
                     </div>
                     <div className={styles.action}>
                         <button onClick={sendDataToPost}>Phản hồi</button>
