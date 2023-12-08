@@ -137,7 +137,7 @@ const Post = (props) => {
     }
 
     const handleSubmit = async () => {
-        if (comment.length != "") {
+        if (comment.trim().length != "") {
             class Comment {
                 constructor(commentId, content, replyFor, userId, postId) {
                     this.commentId = commentId;
@@ -148,7 +148,7 @@ const Post = (props) => {
                 }
             }
 
-            const cmt = new Comment(null, comment, null, user.id, postId);
+            const cmt = new Comment(null, comment.trim(), null, user.id, postId);
 
             await axios.post("http://localhost:8080/comment/savecmt", cmt, { headers: authHeader() })
                 .then(response => {
