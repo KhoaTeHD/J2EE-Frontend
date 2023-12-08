@@ -24,7 +24,7 @@ const FrRequest = () => {
                     <div className={styles.friendlist_label}>{data.length} lời mời kết bạn</div>
                     <div className={styles.FriendList}>
                         {
-                            data && (data.map((val)=>( <FrRequestCard name={val.sender.profileName} bio={val.description} user={user.id} friend={val.sender.userId} key={val.sender.userId}></FrRequestCard> )))
+                            data && (data.map((val)=>( <FrRequestCard name={val.sender.profileName} bio={val.description} user={user.id} friend={val.sender.userId} key={val.sender.userId} avt={val.avatar}></FrRequestCard> )))
                         }
                         
                     </div>

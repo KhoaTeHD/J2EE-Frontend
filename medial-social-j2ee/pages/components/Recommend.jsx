@@ -24,7 +24,7 @@ const Recommend = () => {
                     <div className={styles.friendlist_label}>Gợi ý</div>
                     <div className={styles.FriendList}>
                         {
-                            data && (data.map((val)=>( <RecommendCard name={val.profileName} bio={val.biography} user={user.id} friend={val.userId} key={val.userId}></RecommendCard> )))
+                            data && (data.map((val)=>( <RecommendCard name={val.profileName} bio={val.biography} user={user.id} friend={val.userId} key={val.userId} avt={val.avatar}></RecommendCard> )))
                         }
                     </div>
                 </div>

@@ -27,7 +27,7 @@ const Friends = () => {
                 <div className={styles.friendlist_label}>Bạn bè</div>
                 <div className={styles.FriendList}>
                     {
-                        data && (data.map((val) => (<FriendCard name={val.profileName} bio={val.biography} user={user.id} friend={val.userId} key={val.userId}></FriendCard>)))
+                        data && (data.map((val) => (<FriendCard name={val.profileName} bio={val.biography} user={user.id} friend={val.userId} key={val.userId} avt={val.avatar}></FriendCard>)))
                     }
                 </div>
             </div>

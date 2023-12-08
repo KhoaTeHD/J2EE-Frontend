@@ -1,6 +1,7 @@
 import styles from '@/styles/PostDetail.module.css'
 import Image from 'next/image';
 import UserComment from '../components/UserComment';
+import UserCommentLevel2 from '../components/UserCommentLevel2';
 import { useRouter } from 'next/router';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
@@ -8,6 +9,10 @@ import authHeader from "../api/auth-header";
 import authService from '../api/auth-service';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+var reply = null;
+
+var numComment = 0;
 
 const Post = () => {
 
@@ -33,9 +38,10 @@ const Post = () => {
 
     const [dependency, setDependency] = useState(0);
 
-    const [replyFor, setReplyFor] = useState(null); // Tạo state để lưu dữ liệu từ UserComment
+    const [selectedComponent, setSelectedComponent] = useState(null);
 
     useEffect(() => {
+
 
         const fetchData = async () => {
             if (postId) { // Kiểm tra xem postId có tồn tại không trước khi gọi API
@@ -50,32 +56,32 @@ const Post = () => {
                 }
             }
         };
-            const fetchCurrUserData = async () => {
-                const response = await axios.get("http://localhost:8080/api/users/id/" + user.id, { headers: authHeader() })
-                setCurrUserData(response.data);
-            };
+        const fetchCurrUserData = async () => {
+            const response = await axios.get("http://localhost:8080/api/users/id/" + user.id, { headers: authHeader() })
+            setCurrUserData(response.data);
+        };
 
-            const fetchLikedData = async () => {
+        const fetchLikedData = async () => {
 
-                if (postId) {
-                    try {
-                        const response = await axios.get("http://localhost:8080/reaction/check", {
-                            headers: authHeader(),
-                            params: {
-                                userId: user.id,
-                                postId: postId,
-                            },
-                        });
+            if (postId) {
+                try {
+                    const response = await axios.get("http://localhost:8080/reaction/check", {
+                        headers: authHeader(),
+                        params: {
+                            userId: user.id,
+                            postId: postId,
+                        },
+                    });
 
-                        setLiked(response.data);
-                    } catch (error) {
-                        // Xử lý lỗi khi gọi API
-                    }
-
+                    setLiked(response.data);
+                } catch (error) {
+                    // Xử lý lỗi khi gọi API
                 }
-            };
-            fetchCurrUserData();
-            fetchLikedData();
+
+            }
+        };
+        fetchCurrUserData();
+        fetchLikedData();
 
         fetchData();
         // fetchCurrUserData();
@@ -122,9 +128,9 @@ const Post = () => {
     };
 
     let handleReceiveData = (dataFromUserComment) => {
-        setReplyFor(dataFromUserComment);
         handleCommentClick(); // Lưu dữ liệu từ UserComment vào state
-        alert(replyFor);
+        reply = dataFromUserComment;
+        setSelectedComponent(reply);
     };
 
     const handleSubmit = async () => {
@@ -139,14 +145,15 @@ const Post = () => {
                 }
             }
 
+            const replyFor = reply;
+
             const cmt = new Comment(null, comment, replyFor, user.id, postId);
-            console.log(cmt);
 
             await axios.post("http://localhost:8080/comment/savecmt", cmt, { headers: authHeader() })
                 .then(response => {
                     setComment("");
                     setKey(!key);
-                    setReplyFor(null);
+                    reply = null;
                     notify("Thêm bình luận thành công!");
                 })
                 .catch(error => {
@@ -277,7 +284,47 @@ const Post = () => {
                                 //     data.comments.map((val) => (<UserComment ></UserComment>))
                                 // )
 
-                                data && data.comments.map((val) => (<UserComment val={val} userIdOfPost={data.user.userId} onDelete={handleCommentDelete} sendDataToPost={handleReceiveData}></UserComment>))
+                                // data && data.comments.map((val) => (
+                                //     <UserComment val={val} userIdOfPost={data.user.userId} onDelete={handleCommentDelete} sendDataToPost={handleReceiveData}></UserComment>
+                                // ))
+                                data && data.comments.map((val) => {
+                                    if (val.replies.length === 0) {
+                                        return (
+                                            <UserComment
+                                                key={val.id}
+                                                val={val}
+                                                userIdOfPost={data.user.userId}
+                                                onDelete={handleCommentDelete}
+                                                sendDataToPost={handleReceiveData}
+                                                isSelected={selectedComponent === val.commentId}
+                                            ></UserComment>
+                                        );
+                                    }
+                                    const arrPush = [];
+
+                                    arrPush.push(<UserComment
+                                        key={val.id}
+                                        val={val}
+                                        userIdOfPost={data.user.userId}
+                                        onDelete={handleCommentDelete}
+                                        sendDataToPost={handleReceiveData}
+                                        isSelected={selectedComponent === val.commentId}
+                                    ></UserComment>);
+
+                                    {
+                                        val.replies.map((reply) => (
+                                            arrPush.push(<UserCommentLevel2
+                                                key={reply.id}
+                                                val={reply}
+                                                userIdOfPost={data.user.userId}
+                                                onDelete={handleCommentDelete}
+                                                sendDataToPost={handleReceiveData}
+                                            ></UserCommentLevel2>)
+                                        ))
+                                    }
+
+                                    return arrPush; // Trả về null nếu không thỏa mãn điều kiện
+                                })
                             }
                         </div>
                     </div>
@@ -303,7 +350,6 @@ const Post = () => {
                             )}
                         </div>
                     </div>
-                    <input type="text" style={{ visibility: 'hidden' }} value={replyFor} />
                 </div>
             </div>
         </div>

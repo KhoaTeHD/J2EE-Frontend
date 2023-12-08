@@ -39,14 +39,14 @@
     height: 30px;
     text-align: center;
     line-height: 30px;
-    background-color: aqua;
+    background-color: #62c242;
     color: #000;
     border-radius: 6px;
 }
 
 .edit:hover {
     cursor: pointer;
-    background-color: #ccc;
+    background-color: #9ae681;
     color: #000;
 }
 
@@ -67,7 +67,7 @@
 
 .biography {
     flex: 1;
-    text-align: center;
+    text-align: left;
     line-height: 1.6;
 }
 
@@ -95,4 +95,30 @@
 
 .avatar_src_img {
     border-radius: 50%;
+}
+
+
+
+.num_friends2 {
+    margin-left: 30px;
+    text-decoration: none;
+    color: #000;
+}
+
+.add {
+    text-decoration: none;
+    min-width:100px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: #62c242;
+    color: #000;
+    border-radius: 6px;
+    padding: 0px 8px;
+}
+
+.add:hover {
+    cursor: pointer;
+    background-color: #9ae681;
+    color: #000;
 }
