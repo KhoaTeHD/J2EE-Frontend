@@ -22,7 +22,7 @@
 .recommend_box {
     width: 100px;
     height: 50px;
-    background-color: aqua;
+    background-color: #62c242;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -30,13 +30,17 @@
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
     border: gray solid 1px;
     cursor: pointer;
+}
+
+.recommend_box:hover {
+    background-color: #9ae681;
 }
 
 .friendlist_box {
     margin-left: 20px;
     width: 100px;
     height: 50px;
-    background-color: aqua;
+    background-color: #62c242;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -46,11 +50,15 @@
     cursor: pointer;
 }
 
+.friendlist_box:hover {
+    background-color: #9ae681;
+}
+
 .friendrequest_box {
     margin-left: 20px;
     width: 150px;
     height: 50px;
-    background-color: aqua;
+    background-color: #62c242;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -59,6 +67,10 @@
     border: gray solid 1px;
     cursor: pointer;
     position: relative;
+}
+
+.friendrequest_box:hover {
+    background-color: #9ae681;
 }
 
 .container_bottom {
@@ -92,6 +104,7 @@
 }
 
 .recommend_card_img img {
+    border-radius: 50%;
     height: 100px;
     width: 100px;
     display: block;
@@ -138,7 +151,7 @@
     padding: 0px 20px;
     margin: auto;
     border-radius: 12px;
-    background-color:  #c9eff8;
+    background-color:  #9ae681;
     color: #06252d;
     display: flex;
     align-items: center;
@@ -165,4 +178,9 @@
     position: absolute;
     top: 6px;
     left: 6px;
+}
+
+.link {
+    text-decoration: none;
+    color: #000;
 }

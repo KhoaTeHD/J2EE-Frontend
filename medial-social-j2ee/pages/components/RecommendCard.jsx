@@ -3,9 +3,12 @@ import axios from 'axios';
 import Image from 'next/image'
 import { useState, useEffect } from 'react';
 import authHeader from '../api/auth-header';
-
+import Link from 'next/link';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RecommendCard = (props) => {
+    const notify = (message) => toast.success(message, { autoClose: 1500 });
     const { user, friend } = props;
     const [requested,setRequested] = useState(false);
     const [data,setData] = useState(0);
@@ -25,13 +28,17 @@ const RecommendCard = (props) => {
     const addfriendHandler = () => {
         addFriend();
         setRequested(true);
+        notify("Gửi lời mời kết bạn thành công!");
     }
 
     return (
         <div className={styles.recommend_card}>
-            <div className={styles.recommend_card_img}><Image src="/images/avatar.png" width="100" height="100" alt={props.name}></Image></div>
+            <ToastContainer />
+            <div className={styles.recommend_card_img}><Link className={styles.link} href={`/profile/${friend}`}><Image src={props.avt == null ? "/images/avatar.png" : props.avt} width="100" height="100" alt={props.name}></Image></Link></div>
             <div className={styles.recommend_card_information}>
-                <div className={styles.recommend_card_name}>{props.name}</div>
+                <Link className={styles.link} href={`/profile/${friend}`}>
+                    <div className={styles.recommend_card_name}>{props.name}</div>
+                </Link>
                 <div className={styles.recommend_card_bio}>{props.bio}</div>
                 <div className={styles.recommend_card_mutual_friends}>Có { data && (data) } Bạn chung</div>
             </div>

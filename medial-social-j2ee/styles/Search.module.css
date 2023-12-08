@@ -70,3 +70,8 @@
   color: rgb(179, 172, 172);
   font-size: 18px;
 }/*# sourceMappingURL=Search.module.css.map */
+
+.link {
+  text-decoration: none;
+  color: #000;
+}

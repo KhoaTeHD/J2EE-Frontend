@@ -3,6 +3,7 @@ import axios from 'axios';
 import authHeader from "../api/auth-header";
 import authService from '../api/auth-service'
 import { useState,useRef } from 'react';
+import Link from 'next/link';
 
 export default function Search() {
     const [data, setdata] = useState(undefined);
@@ -26,14 +27,16 @@ export default function Search() {
                 <button onClick={searchInfoUser}>Tìm kiếm</button>
                 <hr />
                 { data != undefined &&  data.map(val=>(
-                    <div className={style.user} key={val.userId}>
-                        <img src={val.avatar==null ? demoData.avatar : val.avatar} alt="" />
-                        <div>
-                            <p className={style.name}>{val.profileName}</p>
-                            <p className={style.desc}>{val.biography == null ? demoData.biography : val.biography}</p>
-                        </div>
+                    <Link className={style.link} href={`/profile/${val.userId}`}>
+                        <div className={style.user} key={val.userId}>
+                            <img src={val.avatar==null ? demoData.avatar : val.avatar} alt="" />
+                            <div>
+                                <p className={style.name}>{val.profileName}</p>
+                                <p className={style.desc}>{val.biography == null ? demoData.biography : val.biography}</p>
+                            </div>
 
-                    </div>
+                        </div>
+                    </Link>
                 ))}
                 
             </div>

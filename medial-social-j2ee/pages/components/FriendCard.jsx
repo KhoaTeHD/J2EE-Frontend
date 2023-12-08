@@ -5,9 +5,11 @@ import { useState, useEffect } from 'react';
 import authHeader from '../api/auth-header';
 import ReactDOM from 'react-dom';
 import Link from 'next/link';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const FriendCard = (props) => {
+    const notify = (message) => toast.success(message, { autoClose: 1500 });
     const { user, friend } = props;
 
     const [data, setData] = useState(0);
@@ -27,15 +29,17 @@ const FriendCard = (props) => {
 
     const unfriendHandler = (event) => {
         unfriendAPI();
+        notify("Hủy kết bạn thành công!");
         const card = event.target.parentNode.parentNode;
         card.remove();
     }
 
     return (
         <div className={styles.recommend_card}>
-            <div className={styles.recommend_card_img}><Image src="/images/avatar.png" width="100" height="100" alt={props.name}></Image></div>
+            <ToastContainer />
+            <div className={styles.recommend_card_img}><Link className={styles.link} href={`/profile/${friend}`}><Image src={props.avt == null ? "/images/avatar.png" : props.avt} width="100" height="100" alt={props.name}></Image></Link></div>
             <div className={styles.recommend_card_information}>
-                <Link href={`/profile/${friend}`}>
+                <Link className={styles.link} href={`/profile/${friend}`}>
                     <div className={styles.recommend_card_name}>{props.name}</div>
                 </Link>
                 <div className={styles.recommend_card_bio}>{props.bio}</div>
