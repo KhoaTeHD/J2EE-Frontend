@@ -25,7 +25,7 @@ const ChatBox = () => {
   useEffect(() => {
     async function getMessage() {
       try {
-        const response = await axios.get(`http://localhost:9091/chat/${RoomID}`);
+        const response = await axios.get(`http://localhost:8080/chat/${RoomID}`);
         console.log(response.data);
         setMessages(()=>response.data);
       } catch (error) {
@@ -36,7 +36,7 @@ const ChatBox = () => {
   }, [RoomID]);
 
   useEffect(() => {
-    const socket = new SockJS("http:/localhost:9091/ws");
+    const socket = new SockJS("http:/localhost:8080/ws");
     const client = Stomp.over(socket);
     let isConnected = false;
     client.connect({},()=>{
@@ -59,6 +59,7 @@ const ChatBox = () => {
     const fetchData = async () => {
         const response = await axios.get("http://localhost:8080/api/friends/get/" + user.id, { headers: authHeader() })
         setFriends(response.data);
+        console.log("danh sach ban be",response.data);
         reloadUIMessage(response.data[0].userId)
     };
     fetchData();
@@ -75,7 +76,9 @@ const ChatBox = () => {
     console.log('test');
     let obj = {
       room_id : RoomID,
-      user_id: JSON.parse(sessionStorage.getItem("user"))?.id,
+      user: {
+        userId: JSON.parse(sessionStorage.getItem("user"))?.id,
+      },
       content: newMessage,
     }
     StompClient.send(
@@ -90,7 +93,7 @@ const ChatBox = () => {
 
   const reloadUIMessage = async (activeID = 1) => {
     try {
-      const response = await axios.post("http://localhost:9091/chat/save",messages);
+      const response = await axios.post("http://localhost:8080/chat/save",messages);
       console.log(response.data);
     } catch  (error) {
       
@@ -148,7 +151,7 @@ const ChatBox = () => {
               <div className="messages" ref={messageContentArea}>
                   {messages.map((message, index) => (
                     message.sender != '' &&
-                    <div key={index} className={user.id == message.user_id ? 'message sender' : 'message receiver'}>
+                    <div key={index} className={user.id == message?.user?.userId ? 'message sender' : 'message receiver'}>
                         <p className='ndk'>{message.content}</p>
                     </div>
                     ))}
