@@ -6,8 +6,12 @@ import authHeader from "./api/auth-header";
 import authService from './api/auth-service';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Edit_Profile = () => {
+
+    const notify = (message) => toast.success(message);
 
     var user = authService.getCurrentUser();
 
@@ -19,7 +23,6 @@ const Edit_Profile = () => {
     const [gender, setGender] = useState(1);
     const [avatar, setAvatar] = useState("");
     const [changeAvatar, setChangeAvatar] = useState(0);
-    const [tempImageUrl, setTempImageUrl] = useState("");
     const [errorAvatar, setErrorAvatar] = useState("");
     const [errorProfileName, setErrorProfileName] = useState("");
     const [errorBirthday, setErrorBirthday] = useState("");
@@ -37,11 +40,11 @@ const Edit_Profile = () => {
             setBiography(response.data.biography);
             setGender(response.data.gender);
             if (response.data.avatar == null) {
-                setAvatar('avatar.png');
+                setAvatar('/images/avatar.png');
             } else {
                 setAvatar(response.data.avatar);
             }
-            setCountBio(response.data.biography === null ? 0 : response.data.biography.length);
+            setCountBio(response.data.biography == null ? 0 : response.data.biography.length);
         };
         fetchData();
     }, []);
@@ -73,21 +76,17 @@ const Edit_Profile = () => {
         setGender(selectedGender === "Nam" ? 1 : 0);
     };
 
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
         if (file) {
             const imageUrl = URL.createObjectURL(file);
-            setTempImageUrl(imageUrl);
+            setAvatar(imageUrl);
+            setSelectedFile(file);
             setChangeAvatar(1);
         }
-        const filePath = e.target.value;
-        const fileName = filePath.split('\\').pop();
-        setAvatar(fileName);
-        setSelectedFile(filePath);
     };
 
-    const handleSaveChange = () => {
+    const handleSaveChange = async () => {
         let valid = 1;
 
         setErrorAvatar("");
@@ -96,7 +95,7 @@ const Edit_Profile = () => {
         setErrorBirthday("");
         setErrorGender("");
 
-        if (avatar === 'avatar.png') {
+        if (avatar === 'avatar.png' && changeAvatar === 0) {
             setErrorAvatar("Avatar không được để trống!");
             valid = 0;
         }
@@ -127,7 +126,41 @@ const Edit_Profile = () => {
             valid = 0;
         }
 
+
         if (valid == 1 && confirm("Bạn có chắc chắn muốn cập nhật các thông tin của người dùng này vào cơ sở dữ liệu?")) {
+
+            var avtnew = "";
+
+            if (selectedFile !== undefined) {
+                const formData = new FormData();
+                formData.append('image', selectedFile);
+
+                //console.log(data.avatar);
+
+                if (data.avatar != null) {
+                    await axios.post("http://localhost:8080/cloudinary/delete?url=" + data.avatar, { headers: authHeader() })
+                        .then(response => {
+                            //console.log(response.data);
+                        })
+                        .catch(error => {
+                            // Xử lý lỗi nếu có
+                            console.error(error);
+                        });
+                }
+
+                await axios.post("http://localhost:8080/cloudinary/upload", formData, { headers: authHeader() })
+                    .then(response => {
+                        avtnew = response.data.url;
+                        setAvatar(response.data.url);
+                        data.avatar = response.data.url;
+                    })
+                    .catch(error => {
+                        // Xử lý lỗi nếu có
+                        console.error(error);
+                    });
+            }
+
+            //console.log(avtnew);
             class User {
                 constructor(userId, profileName, birthday, biography, gender, avatar) {
                     this.userId = userId;
@@ -138,34 +171,18 @@ const Edit_Profile = () => {
                     this.avatar = avatar;
                 }
             }
+            const updateUser = new User(data.userId, profileName.trim(), birthday, biography.trim(), gender, avtnew != "" ? avtnew : avatar);
 
-            const updateUser = new User(data.userId, profileName.trim(), birthday, biography.trim(), gender, avatar);
-
-            axios.post("http://localhost:8080/api/userProfile/updateProfile/" + user.id, updateUser, { headers: authHeader() })
+            await axios.post("http://localhost:8080/api/userProfile/updateProfile/" + user.id, updateUser, { headers: authHeader() })
                 .then(response => {
                     // Xử lý phản hồi từ API nếu cần
-                    alert('Cập nhật thành công');
-                    const formData = new FormData();
-                    formData.append('filePath', selectedFile);
-                    console.log(formData);
-                    console.log(selectedFile);
-
-                    axios.post("http://localhost:8080/api/userProfile/uploadImage", formData, { headers: authHeader() })
-                        .then(response => {
-                            console.log(response.data);
-                        })
-                        .catch(error => {
-                            // Xử lý lỗi nếu có
-                            console.error(error);
-                        });
+                    notify('Cập nhật thành công');
 
                 })
                 .catch(error => {
                     // Xử lý lỗi nếu có
                     alert('Lỗi khi cập nhật');
                 });
-
-
         }
 
     }
@@ -181,19 +198,21 @@ const Edit_Profile = () => {
             `}</style>
             <OptionProfile />
 
+            <ToastContainer />
+
             <div className={styles.right}>
                 <p className={styles.right_heading}>Sửa trang cá nhân</p>
                 <div className={styles.right_prof}>
                     <div className={styles.right_prof_content}>
                         <div className={styles.right_prof_row_first}>
                             <label className={styles.right_prof_row_avatar} htmlFor="right_prof_row_avatar_src">
-                                {/* <Image
+                                <img
                                     className={styles.right_prof_row_avatar_img}
-                                    src={changeAvatar === 0 ? `/images/${avatar}` : tempImageUrl}
+                                    src={avatar}
                                     alt="Avatar"
                                     width={120}
                                     height={120}
-                                /> */}
+                                />
                             </label>
                             <input className={styles.right_prof_row_avatar_src} accept=".jpeg, .jpg, .png" type="file" name="" id="right_prof_row_avatar_src" onChange={handleFileChange} />
                         </div>

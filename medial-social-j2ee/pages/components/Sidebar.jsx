@@ -6,6 +6,8 @@ import AuthService from './../api/auth-service';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Notification from './Notification';
+import Pusher from 'pusher-js';
+
 function changeSidebar() {
     let status = 'show';
     document.getElementById('searchBox').classList.toggle('none');
@@ -16,6 +18,7 @@ function changeSidebar() {
 
 const Sidebar = () => {
     const [currentUser, setCurrentUser] = useState(undefined);
+    const [notify,setNotify] = useState();
     const router = useRouter();
     useEffect(() => {
         const user = AuthService.getCurrentUser();
@@ -28,7 +31,27 @@ const Sidebar = () => {
         else {
             setCurrentUser(user);
         }
+
+        var pusher = new Pusher('7c9f018d64bec3a78677', {
+            cluster: 'ap3'
+        });
+        
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+            if(user.id == data){
+                setNotify(true);
+            }
+
+        });
+        
+        return () => {
+            pusher.unsubscribe('my-channel');
+        };
+
     }, [router]);
+
+    const onClickFriends = () => { if(notify) {setNotify(false)}}
+
     const logOut = () => {
         AuthService.logout();
         router.push("/");
@@ -41,7 +64,7 @@ const Sidebar = () => {
             </Head>
             <div className={styles.top}>
                 <Link className={styles.logo} href={"/home"}>
-                    <Image src="/icons/Fakeins.png" alt="" width="80" height="80" />
+                    <Image src="/icons/Fakeins.png" alt="" width="60" height="60" />
                 </Link>
             </div>
             <div className={styles.center}>
@@ -54,11 +77,12 @@ const Sidebar = () => {
                         <Image className={styles.icon} src="/icons/icons8-search-64.png" alt="" width="40" height="40" />
                         <p className={styles.text} id='search' >Tìm kiếm</p>
                     </button>
-                    <Link className={styles.list_item} href={"/home"}>
+                    <Link className={styles.list_item} href={"/CreatePost"}>
                         <Image className={styles.icon} src="/icons/icons8-add-64.png" alt="" width="40" height="40" />
                         <p className={styles.text}>Tạo bài viết</p>
                     </Link>
-                    <Link className={styles.list_item} href={"/FriendList"}>
+                    <Link className={`${styles.list_item} ${styles.notification}`} href={"/FriendList"} onClick={onClickFriends}>
+                        {notify == true && <span className={styles.dot}></span>}
                         <Image className={styles.icon} src="/icons/icons8-friend-64.png" alt="" width="40" height="40" />
                         <p className={styles.text}>Bạn bè</p>
                     </Link>
