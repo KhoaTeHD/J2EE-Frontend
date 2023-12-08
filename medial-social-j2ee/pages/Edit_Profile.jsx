@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import styles from '@/styles/Edit_Profile.module.css'
 import OptionProfile from "./components/OptionEditProfile";
 import authHeader from "./api/auth-header";
@@ -148,7 +147,7 @@ const Edit_Profile = () => {
                         });
                 }
 
-                await axios.post("http://localhost:8080/cloudinary/upload", formData, { headers: authHeader() })
+                await axios.post("http://localhost:8080/cloudinary/uploadAvatar", formData, { headers: authHeader() })
                     .then(response => {
                         avtnew = response.data.url;
                         setAvatar(response.data.url);
