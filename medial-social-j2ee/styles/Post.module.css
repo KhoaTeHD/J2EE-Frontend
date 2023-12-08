@@ -4,7 +4,8 @@
     padding-bottom: 10px;
     margin: 20px;
     border-radius: 5px;
-    background-color: #F6FCFE;
+    /* background-color: #f8fbf7; */
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
 }
 
 .top_container {
@@ -106,13 +107,14 @@
 }
 
 .comment_input {
+    flex: 1;
     width: 100%;
     padding: 8px 8px 8px 12px;
     border: 1px solid #ddd;
     border-radius: 25px;
     box-sizing: border-box;
     resize: none;
-    margin-right: 10px;
+    /* margin-right: 10px; */
 }
 
 .comment_input:focus {
@@ -135,6 +137,8 @@
     margin-left: 10px;
     margin-right: 10px;
     position: relative;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .comment_count {
@@ -156,14 +160,18 @@
 }
 
 .submit_button {
-    display: block;
-    bottom: 0;
-    right: 0;
-    margin-bottom: 5px;
     padding: 8px 16px;
     border: none;
-    border-radius: 4px;
+    border-radius: 20px;
+    background-color: #62c242;
+    color: white;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+.submit_button:hover {
+    background-color: #9ae681;
 }
 
 .comment_textarea:focus+.submit_button {
@@ -171,7 +179,8 @@
 }
 
 .comment_area {
-    width: calc(100% - 60px);
+    display: flex;
+    width: 100%;
 }
 
 .options:hover {
@@ -181,6 +190,9 @@
 .options {
     position: absolute;
     right: 0;
+    margin-top: 15px;
+    margin-right: 15px;
+    font-size: large;
 }
 
 .overlay {

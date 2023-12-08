@@ -104,56 +104,77 @@ const CreatePost = () => {
             createdDate: formattedDate,
         };
 
+        console.log(post);
+
         const formData = new FormData();
         formData.append('image', selectedImage);
 
-        if (media.type === "Image") {
-            await axios.post("http://localhost:8080/cloudinary/upload", formData, { headers: authHeader() })
-            .then(response => {
-                media.path = response.data.url;
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        if(selectedImage) {
+
+            if (media.type === "Image") {
+                await axios.post("http://localhost:8080/cloudinary/upload", formData, { headers: authHeader() })
+                .then(response => {
+                    media.path = response.data.url;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+            }
+            else {
+                await axios.post("http://localhost:8080/cloudinary/uploadVideo", formData, { headers: authHeader() })
+                .then(response => {
+                    media.path = response.data;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+            }
+    
+            console.log(media.path);
+    
+            await axios.post('http://localhost:8080/post/newpost', post, { headers: authHeader() })
+                .then(response => {
+                    console.log('Bài viết đã được thêm:', response.data);
+                    media.postid = response.data;
+                })
+                .catch(error => {
+                    console.error('Lỗi khi thêm bài viết:', error);
+                });
+    
+            console.log(media);
+    
+            await axios.post('http://localhost:8080/media/newmedia', media, { headers: authHeader() })
+                .then(response => {
+                    setIsLoading(false);
+                    //setShowNotification(true);
+                    notifySuccess("Đăng bài thành công!");
+                    setOverlay(true);
+                })
+                .catch(error => {
+                    setIsLoading(false);
+                    console.error('Lỗi khi thêm bài viết:', error);
+                });
+
         }
         else {
-            await axios.post("http://localhost:8080/cloudinary/uploadVideo", formData, { headers: authHeader() })
-            .then(response => {
-                media.path = response.data;
-            })
-            .catch(error => {
-                console.error(error);
-            });
+            await axios.post('http://localhost:8080/post/newpost', post, { headers: authHeader() })
+                .then(response => {
+                    console.log('Bài viết đã được thêm:', response.data);
+                    setIsLoading(false);
+                    //setShowNotification(true);
+                    notifySuccess("Đăng bài thành công!");
+                    setOverlay(true);
+                })
+                .catch(error => {
+                    console.error('Lỗi khi thêm bài viết:', error);
+                });
         }
 
-        console.log(media.path);
-
-        await axios.post('http://localhost:8080/post/newpost', post, { headers: authHeader() })
-            .then(response => {
-                console.log('Bài viết đã được thêm:', response.data);
-                media.postid = response.data;
-            })
-            .catch(error => {
-                console.error('Lỗi khi thêm bài viết:', error);
-            });
-
-        console.log(media);
-
-        await axios.post('http://localhost:8080/media/newmedia', media, { headers: authHeader() })
-            .then(response => {
-                setIsLoading(false);
-                //setShowNotification(true);
-                notifySuccess("Đăng bài thành công!");
-                setOverlay(true);
-            })
-            .catch(error => {
-                setIsLoading(false);
-                console.error('Lỗi khi thêm bài viết:', error);
-            });
+        
 
     };
 
-    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+    const [windowHeight, setWindowHeight] = useState();
 
     useEffect(() => {
         const handleResize = () => {
@@ -166,6 +187,10 @@ const CreatePost = () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+
+    const goBack = () => {
+        window.history.back();
+    }
 
     // Tính toán chiều cao tối đa của hình ảnh
     const maxImageHeight = windowHeight * 0.55;
@@ -185,27 +210,19 @@ const CreatePost = () => {
                 </div>
             )}
 
-            <Image className={styles.close_button} src="/icons/close.png" width="20" height="20"></Image>
+            <Image className={styles.close_button} src="/icons/close.png" width="20" height="20" onClick={goBack}></Image>
             <div class={styles.post_container}>
                 <div className={styles.head}>
                     <span className={styles.head_text}>Tạo bài viết</span>
                 </div>
                 <div className={styles.user}>
                     <Image className={styles.user_avt} src={user?.avatar || "/images/avatar.png"} width="100" height="100"></Image>
-                    <span className={styles.user_name}>{curentUser.profileName}</span>
+                    <span className={styles.user_name}>{curentUser && curentUser.profileName}</span>
                 </div>
                 <div className={styles.post_content}>
                     {/* <p className={styles.pots_caption} contenteditable="true" onFocus={handleFocus} onBlur={handleBlur} onInput={handleChange}>{content}</p> */}
 
                     <textarea className={styles.post_caption} value={text} onChange={handleInputChange} placeholder='Bạn đang nghĩ gì ?'></textarea>
-
-                    {/* {selectedImages.length > 0 && (
-                        <div className="selected_image_container">
-                            {selectedImages.map((image, index) => (
-                                <img key={index} src={image} alt={`Selected ${index}`} />
-                            ))}
-                        </div>
-                    )} */}
 
                     {selectedImageURL && (
                         <div className={styles.selected_media_preview}>
@@ -220,10 +237,6 @@ const CreatePost = () => {
                                 </video>
                             )}
                         </div>
-                        // <div className={styles.selected_image_preview}>
-                        //     {/* Hiển thị hình ảnh đã chọn */}
-                        //     <img src={selectedImageURL} alt="Selected Image" style={{ maxHeight: `${maxImageHeight}px` }} />
-                        // </div>
                     )}
 
                     <input type="file" accept="image/*, video/*" id="image_upload" onChange={handleImageChange} style={{ display: 'none' }} />

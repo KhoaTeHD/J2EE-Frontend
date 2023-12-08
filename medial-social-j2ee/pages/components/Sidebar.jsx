@@ -64,7 +64,7 @@ const Sidebar = () => {
             </Head>
             <div className={styles.top}>
                 <Link className={styles.logo} href={"/home"}>
-                    <Image src="/icons/Fakeins.png" alt="" width="60" height="60" />
+                    <Image src="/icons/Fakeins.png" alt="" width="120" height="36" />
                 </Link>
             </div>
             <div className={styles.center}>

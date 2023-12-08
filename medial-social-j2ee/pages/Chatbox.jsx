@@ -60,7 +60,7 @@ const ChatBox = () => {
         const response = await axios.get("http://localhost:8080/api/friends/get/" + user.id, { headers: authHeader() })
         setFriends(response.data);
         console.log("danh sach ban be",response.data);
-        reloadUIMessage(response.data[0].userId)
+        reloadUIMessage(response.data[0]?.userId)
     };
     fetchData();
   }, []);

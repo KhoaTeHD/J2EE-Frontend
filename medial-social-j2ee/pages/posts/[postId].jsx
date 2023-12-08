@@ -80,7 +80,7 @@ const Post = () => {
         fetchData();
         // fetchCurrUserData();
         // fetchLikedData();
-    }, [key, postUID, currUserData, dependency]);
+    }, [key, postId, dependency]);
 
 
     function timeSincePost(postTime) {
@@ -204,6 +204,10 @@ const Post = () => {
         }
     }
 
+    const goBack = () => {
+        window.history.back();
+    }
+
 
     const iconLikeSrc = liked ? '/icons/post_ping_heart.png' : '/icons/post_heart.png';
 
@@ -219,18 +223,42 @@ const Post = () => {
         );
     }
 
+    const isVideo = data && data.media && data.media.length === 1 && data.media[0].type === "Video";
+
     return (
 
 
         <div className={styles.container}>
             <ToastContainer />
-            <Image className={styles.close_button} src="/icons/close.png" width="20" height="20"></Image>
+            <Image className={styles.close_button} src="/icons/close.png" width="20" height="20" onClick = {goBack}></Image>
             <div className={styles.post_container}>
-                <div className={styles.post}>
-                    {data && data.media && data.media[0] && data.media[0].path && (
-                        <Image className={styles.post_image} src={data.media[0].path} width="1000" height="1000" />
-                    )}
-                </div>
+                
+                {isVideo ? (
+                    <div className={styles.post}>
+                        <video className={styles.post_video} controls>
+                            {data && data.media && data.media.length === 1 && data.media[0].path ? (
+                                <source
+                                    src={data.media[0].path}
+                                    type="video/mp4"
+                                />
+                            ) : (
+                                <p>Your browser does not support the video tag or the video is unavailable.</p>
+                            )}
+                        </video>
+                    </div>
+                ) : (
+                    data && data.media && data.media.length === 1 && data.media[0].path && (
+                        <div className={styles.post}>
+                            <Image
+                                className={styles.post_image}
+                                src={data.media[0].path}
+                                width={1000}
+                                height={1000}
+                            />
+                        </div>
+                    )
+                )}
+                
                 <div className={styles.left_img}>
                     <div className={styles.user}>
                         <Image className={styles.user_avt} src={data?.user?.avatar || "/images/avatar.png"} width="100" height="100"></Image>
@@ -262,7 +290,7 @@ const Post = () => {
                         <div className={styles.actions}>
                             <Image className={styles.action} src={iconLikeSrc} alt="" width="32" height="32" onClick={handlesReaction} />
                             <Image className={styles.action} src="/icons/post_comment.png" alt="" width="32" height="32" onClick={handleCommentClick} />
-                            <Image className={styles.action} src="/icons/post_share.png" alt="" width="32" height="32" />
+                            {/* <Image className={styles.action} src="/icons/post_share.png" alt="" width="32" height="32" /> */}
                         </div>
                         <div className={styles.comment}>
                             <Image className={styles.comment_user_avt} src={currUserData?.avatar || "/images/avatar.png"} alt="Avatar" width="100" height="100"></Image>

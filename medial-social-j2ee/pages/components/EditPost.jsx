@@ -1,4 +1,4 @@
-import styles from '@/styles/CreatePost.module.css'
+import styles from '@/styles/EditPost.module.css'
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -7,13 +7,8 @@ import authService from '../api/auth-service';
 import { format } from 'date-fns';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRouter } from 'next/router';
 
-const EditPost = () => {
-
-    const router = useRouter();
-
-    const { postId } = router.query;
+const EditPost = (props) => {
 
     const waitTime = 1500;
 
@@ -23,11 +18,15 @@ const EditPost = () => {
         toast.success(message, { autoClose: waitTime });
         setTimeout(() => {
             //window.location.href = '/Homepage'; // Điều hướng đến trang chủ
-            window.history.back();
+            window.location.reload();
         }, waitTime);
     }
     
     var curentUser = authService.getCurrentUser();
+
+    const [data, setData] = useState();
+
+    const [currUserData, setCurrUserData] = useState();
 
     const [user, setUser] = useState();
 
@@ -43,6 +42,10 @@ const EditPost = () => {
 
     const [windowHeight, setWindowHeight] = useState();
 
+    const [text, setText] = useState('');
+
+    const [dependency, setDependency] = useState(0);
+
     useEffect(() => {
         const handleResize = () => {
             setWindowHeight(window.innerHeight);
@@ -56,13 +59,24 @@ const EditPost = () => {
     }, []);
 
     useEffect(() => {
-        const fetchUserData = async () => {
+
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/post/${props.postId}`, { headers: authHeader() });
+                setData(response.data);
+                setText(data.caption);
+                console.log(data);  
+            } catch (error) {
+            }
+        };
+        const fetchCurrUserData = async () => {
             const response = await axios.get("http://localhost:8080/api/users/id/" + curentUser.id, { headers: authHeader() })
-            setUser(response.data);
+            setCurrUserData(response.data);
         };
 
-        fetchUserData();
-    }, []);
+        fetchCurrUserData();
+        fetchData();
+    }, [dependency]);
 
     const clearSelectedImage = () => {
         setSelectedImage(null);
@@ -70,11 +84,6 @@ const EditPost = () => {
     };
 
     const handleImageChange = (event) => {
-        // const file = event.target.files[0];
-        // setSelectedImage(file);
-
-        // const imageURL = URL.createObjectURL(file);
-        // setSelectedImageURL(imageURL);
         const file = event.target.files[0];
         setSelectedImage(file);
     
@@ -85,17 +94,12 @@ const EditPost = () => {
         setSelectedImageURL(mediaURL);
     };
 
-    const [text, setText] = useState('');
 
     const handleInputChange = (event) => {
         setText(event.target.value);
     };
 
-    const currentDate = new Date();
-
-    const formattedDate = format(currentDate, 'yyyy-MM-dd HH:mm:ss');
-
-    const saveNewPost = async () => {
+    const editPost = async () => {
 
         setIsLoading(true);
 
@@ -107,55 +111,48 @@ const EditPost = () => {
 
         // const media = {
         //     path: "",
-        //     type: "Image",
+        //     type: selectedMediaType === 'image' ? "Image" : "Video",
         //     postid: ""
         // };
 
-        const media = {
-            path: "",
-            type: selectedMediaType === 'image' ? "Image" : "Video",
-            postid: ""
-        };
+        // const post = {
+        //     user: user,
+        //     caption: text,
+        //     createdDate: formattedDate,
+        // };
 
-        const post = {
-            user: user,
-            caption: text,
-            createdDate: formattedDate,
-        };
+        // const formData = new FormData();
+        // formData.append('image', selectedImage);
 
-        const formData = new FormData();
-        formData.append('image', selectedImage);
+        // await axios.post("http://localhost:8080/cloudinary/upload", formData, { headers: authHeader() })
+        //     .then(response => {
+        //         media.path = response.data.url;
+        //     })
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
 
-        await axios.post("http://localhost:8080/cloudinary/upload", formData, { headers: authHeader() })
-            .then(response => {
-                media.path = response.data.url;
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        // await axios.post('http://localhost:8080/post/newpost', post, { headers: authHeader() })
+        //     .then(response => {
+        //         console.log('Bài viết đã được thêm:', response.data);
+        //         media.postid = response.data;
+        //     })
+        //     .catch(error => {
+        //         console.error('Lỗi khi thêm bài viết:', error);
+        //     });
 
-        await axios.post('http://localhost:8080/post/newpost', post, { headers: authHeader() })
-            .then(response => {
-                console.log('Bài viết đã được thêm:', response.data);
-                media.postid = response.data;
-            })
-            .catch(error => {
-                console.error('Lỗi khi thêm bài viết:', error);
-            });
+        // console.log(media);
 
-        console.log(media);
-
-        await axios.post('http://localhost:8080/media/newmedia', media, { headers: authHeader() })
-            .then(response => {
-                setIsLoading(false);
-                //setShowNotification(true);
-                notifySuccess("Đăng bài thành công!");
-                setOverlay(true);
-            })
-            .catch(error => {
-                setIsLoading(false);
-                console.error('Lỗi khi thêm bài viết:', error);
-            });
+        // await axios.post('http://localhost:8080/media/newmedia', media, { headers: authHeader() })
+        //     .then(response => {
+        //         setIsLoading(false);
+        //         notifySuccess("Đăng bài thành công!");
+        //         setOverlay(true);
+        //     })
+        //     .catch(error => {
+        //         setIsLoading(false);
+        //         console.error('Lỗi khi thêm bài viết:', error);
+        //     });
 
     };
 
@@ -167,8 +164,7 @@ const EditPost = () => {
 
             {overlay && (
                 <div className={styles.overlay}></div>
-            )
-            }
+            )}
 
             <ToastContainer />
             {isLoading && (
@@ -177,10 +173,10 @@ const EditPost = () => {
                 </div>
             )}
 
-            <Image className={styles.close_button} src="/icons/close.png" width="20" height="20"></Image>
+            <Image className={styles.close_button} src="/icons/close.png" width="20" height="20" onClick={props.onClose}></Image>
             <div class={styles.post_container}>
                 <div className={styles.head}>
-                    <span className={styles.head_text}>Tạo bài viết</span>
+                    <span className={styles.head_text}>Sửa bài viết</span>
                 </div>
                 <div className={styles.user}>
                     <Image className={styles.user_avt} src={user?.avatar || "/images/avatar.png"} width="100" height="100"></Image>
@@ -189,15 +185,7 @@ const EditPost = () => {
                 <div className={styles.post_content}>
                     {/* <p className={styles.pots_caption} contenteditable="true" onFocus={handleFocus} onBlur={handleBlur} onInput={handleChange}>{content}</p> */}
 
-                    <textarea className={styles.post_caption} value={text} onChange={handleInputChange} placeholder='Bạn đang nghĩ gì ?'></textarea>
-
-                    {/* {selectedImages.length > 0 && (
-                        <div className="selected_image_container">
-                            {selectedImages.map((image, index) => (
-                                <img key={index} src={image} alt={`Selected ${index}`} />
-                            ))}
-                        </div>
-                    )} */}
+                    <textarea className={styles.post_caption} value={ text && text } onChange={handleInputChange} placeholder='Bạn đang nghĩ gì ?'></textarea>
 
                     {selectedImageURL && (
                         <div className={styles.selected_media_preview}>
@@ -212,10 +200,6 @@ const EditPost = () => {
                                 </video>
                             )}
                         </div>
-                        // <div className={styles.selected_image_preview}>
-                        //     {/* Hiển thị hình ảnh đã chọn */}
-                        //     <img src={selectedImageURL} alt="Selected Image" style={{ maxHeight: `${maxImageHeight}px` }} />
-                        // </div>
                     )}
 
                     <input type="file" accept="image/*, video/*" id="image_upload" onChange={handleImageChange} style={{ display: 'none' }} />
@@ -224,7 +208,7 @@ const EditPost = () => {
                         <label onClick={clearSelectedImage} className={styles.delete_image_button}>Bỏ chọn</label>
                     )}
                 </div>
-                <button onClick={saveNewPost} >Đăng bài</button>
+                <button onClick={editPost} >Sửa bài viết</button>
             </div>
         </div>
     );

@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { set } from 'date-fns';
 import { button } from 'react-validation/build/button';
 import ConfirmationDialog from './ConfirmationDialog';
+import EditPost from './EditPost';
 
 const Post = (props) => {
 
@@ -29,6 +30,8 @@ const Post = (props) => {
     const notify = (message) => toast.success(message);
 
     const [liked, setLiked] = useState(false);
+
+    const [isEdit, setIsEdit] = useState(false);
 
     const [dependency, setDependency] = useState(0);
 
@@ -164,7 +167,7 @@ const Post = (props) => {
         }
     };
 
-    const isOwner = currUserData && postData && postData.user && currUserData.id === postData.user.id;
+    const isOwner = postData && postData.user && user && user.id === postData.user.userId;
 
     const [showOptions, setShowOptions] = useState(false);
 
@@ -173,8 +176,13 @@ const Post = (props) => {
     };
 
     const handleEdit = () => {
-        // Xử lý chức năng chỉnh sửa bài viết ở đây
+        setIsEdit(true);
+        setShowOptions(false);
     };
+
+    const closeEdit = () => {
+        setIsEdit(false);
+    }
 
     const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -208,7 +216,7 @@ const Post = (props) => {
     const avtSrcCurrUser = currUserData?.avatar || "/images/avatar.png";
     const iconLikeSrc = liked ? '/icons/post_ping_heart.png' : '/icons/post_heart.png';
     //const 
-    const isImage = postData && postData.media && postData.media.length === 1 && postData.media[0].type === "Image";
+    const isVideo = postData && postData.media && postData.media.length === 1 && postData.media[0].type === "Video";
 
     return (
         <div className={styles.container}>
@@ -220,13 +228,16 @@ const Post = (props) => {
                     onCancel={handleCancelDelete}
                 />
             )}
+
+            {isEdit && (
+                <EditPost postId = {props.postId} onClose = {closeEdit}/>
+            )}
+
             {showOptions && (
                 <div className={styles.overlay}>
                     <div className={styles.options_container}>
                         <span className={styles.delete_option} onClick={handleDelete} >Xóa</span>
-                        <Link className={styles.link} href={`/editpost/${postId}`}>
-                            <span className={styles.edit_option}>Sửa</span>
-                        </Link>
+                        <span className={styles.edit_option} /*onClick={handleEdit}*/ >Sửa</span>
                         <span className={styles.cancel_option} onClick={toggleOptions} >Hoàn tác</span>
                     </div>
                 </div>
@@ -240,20 +251,14 @@ const Post = (props) => {
                 </div>
                 {isOwner && (
                     <div className={styles.options} onClick={toggleOptions}>
-                        <span className={styles.options_icon}>...</span>
+                        <span className={styles.options_icon}>•••</span>
                     </div>
                 )}
             </div>
 
             <p className={styles.post_caption}>{postData && postData.caption}</p>
-
-            {/* <Link href={`/posts/${postId}`}>
+            {!isVideo ? (
                 <div className={styles.post}>
-                    <Image className={styles.post_image} src={postData && postData.media && postData.media.length === 1 && postData.media[0].path} width="1000" height="1000"></Image>
-                </div>
-            </Link> */}
-            <div className={styles.post}>
-                {isImage ? (
                     <Link href={`/posts/${postId}`}>
                         <Image
                             className={styles.post_image}
@@ -262,25 +267,25 @@ const Post = (props) => {
                             height={1000}
                         />
                     </Link>
-                ) : (
+                </div>
+            ) : (
+                <div className={styles.post}>
                     <video className={styles.post_video} controls>
-                        <source
-                            src={postData && postData.media && postData.media.length === 1 && postData.media[0].path}
-                            type="video/mp4"
-                        />
-                        Your browser does not support the video tag.
+                        {postData && postData.media && postData.media.length === 1 && postData.media[0].path ? (
+                            <source
+                                src={postData.media[0].path}
+                                type="video/mp4"
+                            />
+                        ) : (
+                            <p>Your browser does not support the video tag or the video is unavailable.</p>
+                        )}
                     </video>
-                )}
-            </div>
-
+                </div>
+            )}
 
             <div className={styles.like_comment}>
-
-
-                {/* <span className={styles.like_count}>{postData && postData.likes && postData.likes.length} lượt thích</span> */}
                 <span className={styles.like_count}>{numLikes} lượt thích</span>
                 <span className={styles.comment_count}>{postData && postData.comments && postData.comments.length} bình luận</span>
-
             </div>
             <div className={styles.actions}>
                 <Image className={styles.action} src={iconLikeSrc} alt="like" width="32" height="32" onClick={handlesReaction} />
@@ -289,7 +294,7 @@ const Post = (props) => {
                     <Image className={styles.action} src="/icons/post_comment.png" alt="comment" width="32" height="32" />
                 </Link>
 
-                <Image className={styles.action} src="/icons/post_share.png" alt="share" width="32" height="32" />
+                {/* <Image className={styles.action} src="/icons/post_share.png" alt="share" width="32" height="32" /> */}
             </div>
             <div className={styles.comment}>
                 <Image className={styles.comment_user_avt} src={avtSrcCurrUser} alt="Avatar" width="100" height="100"></Image>
