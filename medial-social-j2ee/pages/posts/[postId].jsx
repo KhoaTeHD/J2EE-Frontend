@@ -14,11 +14,14 @@ const Post = () => {
     var user = authService.getCurrentUser();
 
     const router = useRouter();
+
     const notify = (message) => toast.success(message, { autoClose: 500 });
 
     const { postId } = router.query;
 
     const [data, setData] = useState();
+
+    const [postUID, setPostUID] = useState(postId);
 
     const [currUserData, setCurrUserData] = useState();
 
@@ -33,7 +36,7 @@ const Post = () => {
     const [replyFor, setReplyFor] = useState(null); // Tạo state để lưu dữ liệu từ UserComment
 
     useEffect(() => {
-    
+
         const fetchData = async () => {
             if (postId) { // Kiểm tra xem postId có tồn tại không trước khi gọi API
                 try {
@@ -43,31 +46,41 @@ const Post = () => {
                     setNumLikes(numL);
                 } catch (error) {
                     // Xử lý lỗi khi gọi API
-                    console.error('Error fetching data:', error);
+                    //setPostUID(null);
                 }
             }
         };
-        const fetchCurrUserData = async () => {
-            const response = await axios.get("http://localhost:8080/api/users/id/" + user.id, { headers: authHeader() })
-            setCurrUserData(response.data);
-        };
+            const fetchCurrUserData = async () => {
+                const response = await axios.get("http://localhost:8080/api/users/id/" + user.id, { headers: authHeader() })
+                setCurrUserData(response.data);
+            };
 
-        const fetchLikedData = async () => {
-            const response = await axios.get("http://localhost:8080/reaction/check", {
-                headers: authHeader(),
-                params: {
-                    userId: user.id,
-                    postId: postId,
-                },
-            });
+            const fetchLikedData = async () => {
 
-            setLiked(response.data);
-        };
+                if (postId) {
+                    try {
+                        const response = await axios.get("http://localhost:8080/reaction/check", {
+                            headers: authHeader(),
+                            params: {
+                                userId: user.id,
+                                postId: postId,
+                            },
+                        });
+
+                        setLiked(response.data);
+                    } catch (error) {
+                        // Xử lý lỗi khi gọi API
+                    }
+
+                }
+            };
+            fetchCurrUserData();
+            fetchLikedData();
 
         fetchData();
-        fetchCurrUserData();
-        fetchLikedData();
-    }, [key, postId, currUserData, dependency]);
+        // fetchCurrUserData();
+        // fetchLikedData();
+    }, [key, postUID, currUserData, dependency]);
 
 
     function timeSincePost(postTime) {
@@ -195,6 +208,9 @@ const Post = () => {
     const iconLikeSrc = liked ? '/icons/post_ping_heart.png' : '/icons/post_heart.png';
 
     if (!data) {
+
+        console.log(postUID);
+
         return (
             <div className={styles.error_container}>
                 <h1 className={styles.error_heading}>404 - Post not found</h1>
@@ -205,7 +221,7 @@ const Post = () => {
 
     return (
 
-        
+
         <div className={styles.container}>
             <ToastContainer />
             <Image className={styles.close_button} src="/icons/close.png" width="20" height="20"></Image>
@@ -244,7 +260,7 @@ const Post = () => {
                             <span className={styles.comment_count}>{data && data.comments.length} bình luận</span>
                         </div>
                         <div className={styles.actions}>
-                            <Image className={styles.action} src={iconLikeSrc} alt="" width="32" height="32" onClick={handlesReaction}/>
+                            <Image className={styles.action} src={iconLikeSrc} alt="" width="32" height="32" onClick={handlesReaction} />
                             <Image className={styles.action} src="/icons/post_comment.png" alt="" width="32" height="32" onClick={handleCommentClick} />
                             <Image className={styles.action} src="/icons/post_share.png" alt="" width="32" height="32" />
                         </div>

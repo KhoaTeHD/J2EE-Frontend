@@ -107,13 +107,26 @@ const CreatePost = () => {
         const formData = new FormData();
         formData.append('image', selectedImage);
 
-        await axios.post("http://localhost:8080/cloudinary/upload", formData, { headers: authHeader() })
+        if (media.type === "Image") {
+            await axios.post("http://localhost:8080/cloudinary/upload", formData, { headers: authHeader() })
             .then(response => {
                 media.path = response.data.url;
             })
             .catch(error => {
                 console.error(error);
             });
+        }
+        else {
+            await axios.post("http://localhost:8080/cloudinary/uploadVideo", formData, { headers: authHeader() })
+            .then(response => {
+                media.path = response.data;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+
+        console.log(media.path);
 
         await axios.post('http://localhost:8080/post/newpost', post, { headers: authHeader() })
             .then(response => {
