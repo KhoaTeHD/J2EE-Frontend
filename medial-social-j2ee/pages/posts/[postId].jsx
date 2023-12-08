@@ -6,18 +6,25 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import authHeader from "../api/auth-header";
 import authService from '../api/auth-service';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Post = () => {
 
     var user = authService.getCurrentUser();
-    
+
     const router = useRouter();
+    const notify = (message) => toast.success(message, { autoClose: 500 });
 
     const { postId } = router.query;
 
     const [data, setData] = useState();
 
     const [currUserData, setCurrUserData] = useState();
+
+    const [key, setKey] = useState(true);
+
+    const [replyFor, setReplyFor] = useState(null); // Tạo state để lưu dữ liệu từ UserComment
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,7 +38,7 @@ const Post = () => {
 
         fetchData();
         fetchCurrUserData();
-    }, []);
+    }, [key]);
 
 
     function timeSincePost(postTime) {
@@ -72,30 +79,43 @@ const Post = () => {
         }
     };
 
+    let handleReceiveData = (dataFromUserComment) => {
+        setReplyFor(dataFromUserComment);
+        handleCommentClick(); // Lưu dữ liệu từ UserComment vào state
+        alert(replyFor);
+    };
+
     const handleSubmit = async () => {
-        // if (comment.length != "") {
-        //     class Comment {
-        //         constructor(commentId, content, replyFor, userId, postId) {
-        //             this.commentId = commentId;
-        //             this.content = content;
-        //             this.replyFor = replyFor;
-        //             this.userId = userId;
-        //             this.postId = postId;
-        //         }
-        //     }
+        if (comment.trim().length != "") {
+            class Comment {
+                constructor(commentId, content, replyFor, userId, postId) {
+                    this.commentId = commentId;
+                    this.content = content;
+                    this.replyFor = replyFor;
+                    this.userId = userId;
+                    this.postId = postId;
+                }
+            }
 
-        //     const cmt = new Comment(null, comment, null, user.id, postId);
+            const cmt = new Comment(null, comment, replyFor, user.id, postId);
+            console.log(cmt);
 
-        //     await axios.post("http://localhost:8080/comment/savecmt", cmt, { headers: authHeader() })
-        //         .then(response => {
-        //             setComment("");
-        //             notify("Thêm bình luận thành công!");
-        //         })
-        //         .catch(error => {
-        //             // Xử lý lỗi nếu có
-        //             console.error(error);
-        //         });
-        // }
+            await axios.post("http://localhost:8080/comment/savecmt", cmt, { headers: authHeader() })
+                .then(response => {
+                    setComment("");
+                    setKey(!key);
+                    setReplyFor(null);
+                    notify("Thêm bình luận thành công!");
+                })
+                .catch(error => {
+                    // Xử lý lỗi nếu có
+                    console.error(error);
+                });
+        }
+    };
+
+    const handleCommentDelete = () => {
+        setKey(!key);
     };
 
     const [comment, setComment] = useState('');
@@ -106,6 +126,7 @@ const Post = () => {
 
     return (
         <div className={styles.container}>
+            <ToastContainer />
             <Image className={styles.close_button} src="/icons/close.png" width="20" height="20"></Image>
             <div className={styles.post_container}>
                 <div className={styles.post}>
@@ -123,15 +144,17 @@ const Post = () => {
                     <p className={styles.post_caption}>{data && data.caption}</p>
 
                     <div className={styles.post_comments}>
-                        {
-                            // data && data.comments.length === 0 ? (
-                            //     <p className={styles.be_the_first}>Hãy là người bình luận đầu tiên</p>
-                            // ) : (
-                            //     data.comments.map((val) => (<UserComment ></UserComment>))
-                            // )
-                        
-                            data && data.comments.map((val) => (<UserComment val = {val} ></UserComment>))
-                        }
+                        <div className={styles.post_comments_inner}>
+                            {
+                                // data && data.comments.length === 0 ? (
+                                //     <p className={styles.be_the_first}>Hãy là người bình luận đầu tiên</p>
+                                // ) : (
+                                //     data.comments.map((val) => (<UserComment ></UserComment>))
+                                // )
+
+                                data && data.comments.map((val) => (<UserComment val={val} userIdOfPost={data.user.userId} onDelete={handleCommentDelete} sendDataToPost={handleReceiveData}></UserComment>))
+                            }
+                        </div>
                     </div>
 
                     <div className={styles.left_bottom}>
@@ -141,20 +164,21 @@ const Post = () => {
                         </div>
                         <div className={styles.actions}>
                             <Image className={styles.action} src="/icons/post_heart.png" alt="" width="32" height="32" />
-                            <Image className={styles.action} src="/icons/post_comment.png" alt="" width="32" height="32" onClick={handleCommentClick}/>
+                            <Image className={styles.action} src="/icons/post_comment.png" alt="" width="32" height="32" onClick={handleCommentClick} />
                             <Image className={styles.action} src="/icons/post_share.png" alt="" width="32" height="32" />
                         </div>
                         <div className={styles.comment}>
                             <Image className={styles.comment_user_avt} src={currUserData?.avatar || "/images/avatar.png"} alt="Avatar" width="100" height="100"></Image>
                             {/* <input ref={commentInputRef} className={styles.comment_input} type="text" placeholder="Viết bình luận..." /> */}
                             <textarea ref={commentInputRef} className={styles.comment_textarea} value={comment} onChange={handleCommentChange} placeholder="Viết bình luận..." />
-                            {comment.trim() !== '' && ( 
+                            {comment.trim() !== '' && (
                                 <button onClick={handleSubmit} className={styles.submit_button}>
                                     Gửi
                                 </button>
                             )}
                         </div>
                     </div>
+                    <input type="text" style={{ visibility: 'hidden' }} value={replyFor} />
                 </div>
             </div>
         </div>

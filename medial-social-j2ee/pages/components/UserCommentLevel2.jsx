@@ -3,13 +3,10 @@ import Image from 'next/image';
 import AuthService from '../api/auth-service';
 import authHeader from "../api/auth-header";
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const UserComment = (props) => {
 
     var user = AuthService.getCurrentUser();
-    const notify = (message) => toast.success(message, { autoClose: 500 });
 
     const isCurrentUser = (user && props.val.user.userId === user.id) || (user && props.userIdOfPost === user.id);
 
@@ -17,18 +14,12 @@ const UserComment = (props) => {
         await axios.delete("http://localhost:8080/comment/delete/" + props.val.commentId, { headers: authHeader() })
             .then(response => {
                 props.onDelete();
-                notify("Bạn vừa xóa một bình luận!");
             })
             .catch(error => {
                 // Xử lý lỗi nếu có
                 console.error(error);
             });
     }
-
-    const sendDataToPost = () => {
-        const data = props.val.commentId;
-        props.sendDataToPost(data); // Gọi hàm từ props để gửi dữ liệu lên Post
-    };
 
     return (
         <div>
@@ -42,7 +33,7 @@ const UserComment = (props) => {
                         <div className={styles.user_comment}>{props.val.content}</div>
                     </div>
                     <div className={styles.action}>
-                        <button onClick={sendDataToPost}>Phản hồi</button>
+                        <button>Phản hồi</button>
                         {isCurrentUser && <button onClick={handleDelButton}>Xóa</button>}
                     </div>
                 </div>
