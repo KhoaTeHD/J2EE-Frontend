@@ -216,3 +216,22 @@
     resize: none;
     margin-right: 8px;
 }
+
+.error_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+  .error_heading {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .error_message {
+    font-size: 1rem;
+  }
