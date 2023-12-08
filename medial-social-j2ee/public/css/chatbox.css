@@ -1,0 +1,142 @@
+.chat-box {
+  width: 100%;
+  height: 100vh;
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.chat-box .navigation {
+  box-sizing: border-box;
+  height: 8%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid #cecaca;
+  padding: 5px 50px;
+  color: #53b7e0;
+}
+.chat-box .navigation .btnReturn {
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+}
+.chat-box .navigation .btnReturn button {
+  height: 80%;
+  width: 120px;
+  font-size: 17px;
+  font-weight: bold;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(185, 183, 183, 0.1);
+  padding: 10px;
+  cursor: pointer;
+}
+.chat-box .content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 92vh;
+}
+.chat-box .content .listFriend {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #cecaca;
+  padding: 10px;
+}
+.chat-box .content .listFriend .info {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 0px;
+}
+.chat-box .content .listFriend .info img {
+  width: 70px;
+  height: 70px;
+}
+.chat-box .content .listFriend .info p {
+  margin-left: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.chat-box .content .listFriend .active {
+  background-color: rgba(37, 150, 190, 0.6);
+  border-radius: 10px;
+  color: white;
+}
+.chat-box .content .messagesArea {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 80%;
+}
+.chat-box .content .messagesArea .messages {
+  height: 90%;
+  padding: 10px;
+  font-size: 20px;
+}
+.chat-box .content .messagesArea .messages .message {
+  border-radius: 50px;
+}
+.chat-box .content .messagesArea .messages .message p.ndk {
+  padding: 0;
+  background-color: rgba(185, 183, 183, 0.1);
+  padding: 15px 30px;
+  display: inline-block;
+  border-radius: 25px;
+  margin: 5px;
+}
+.chat-box .content .messagesArea .messages .sender {
+  display: flex;
+  justify-content: flex-end;
+}
+.chat-box .content .messagesArea .messages .sender p.ndk {
+  background-color: #175a75;
+  color: white;
+}
+.chat-box .content .messagesArea .messages .receiver {
+  display: flex;
+  justify-content: flex-start;
+}
+.chat-box .content .messagesArea .input-box {
+  height: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.chat-box .content .messagesArea .input-box input {
+  box-sizing: border-box;
+  width: 85%;
+  margin-right: 10px;
+  height: 50px;
+  font-size: 20px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(185, 183, 183, 0.2);
+  padding: 5px 20px;
+}
+.chat-box .content .messagesArea .input-box button {
+  width: 8%;
+  height: 50px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  background-color: rgb(37, 150, 190);
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+}/*# sourceMappingURL=chatbox.css.map */

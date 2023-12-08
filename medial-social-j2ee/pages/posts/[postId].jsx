@@ -19,28 +19,40 @@ const Post = () => {
     var user = authService.getCurrentUser();
 
     const router = useRouter();
+
     const notify = (message) => toast.success(message, { autoClose: 500 });
 
     const { postId } = router.query;
 
     const [data, setData] = useState();
 
+    const [postUID, setPostUID] = useState(postId);
+
     const [currUserData, setCurrUserData] = useState();
 
     const [key, setKey] = useState(true);
 
+    const [numLikes, setNumLikes] = useState();
+
+    const [liked, setLiked] = useState(false);
+
+    const [dependency, setDependency] = useState(0);
+
     const [selectedComponent, setSelectedComponent] = useState(null);
 
     useEffect(() => {
+
 
         const fetchData = async () => {
             if (postId) { // Kiểm tra xem postId có tồn tại không trước khi gọi API
                 try {
                     const response = await axios.get(`http://localhost:8080/post/${postId}`, { headers: authHeader() });
                     setData(response.data);
+                    const numL = response.data?.likes?.length;
+                    setNumLikes(numL);
                 } catch (error) {
                     // Xử lý lỗi khi gọi API
-                    console.error('Error fetching data:', error);
+                    //setPostUID(null);
                 }
             }
         };
@@ -49,9 +61,32 @@ const Post = () => {
             setCurrUserData(response.data);
         };
 
-        fetchData();
+        const fetchLikedData = async () => {
+
+            if (postId) {
+                try {
+                    const response = await axios.get("http://localhost:8080/reaction/check", {
+                        headers: authHeader(),
+                        params: {
+                            userId: user.id,
+                            postId: postId,
+                        },
+                    });
+
+                    setLiked(response.data);
+                } catch (error) {
+                    // Xử lý lỗi khi gọi API
+                }
+
+            }
+        };
         fetchCurrUserData();
-    }, [key, postId, currUserData]);
+        fetchLikedData();
+
+        fetchData();
+        // fetchCurrUserData();
+        // fetchLikedData();
+    }, [key, postUID, currUserData, dependency]);
 
 
     function timeSincePost(postTime) {
@@ -138,7 +173,62 @@ const Post = () => {
         setComment(event.target.value);
     };
 
+    const handlesReaction = async () => {
+
+        try {
+            const response = await axios.get("http://localhost:8080/reaction/check", {
+                headers: authHeader(),
+                params: {
+                    userId: user.id,
+                    postId: postId,
+                },
+            });
+
+            const hasLiked = response.data;
+
+            if (hasLiked) {
+
+                await axios.delete("http://localhost:8080/reaction/delete", {
+                    headers: authHeader(),
+                    params: {
+                        userId: user.id,
+                        postId: postId,
+                    },
+                });
+                console.log("Reaction deleted successfully!");
+
+            } else {
+                const newComment = {
+                    user: currUserData,
+                    post: data,
+                };
+                await axios.post("http://localhost:8080/reaction/new", newComment, { headers: authHeader() });
+            }
+            setDependency(prevDependency => prevDependency + 1);
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    const iconLikeSrc = liked ? '/icons/post_ping_heart.png' : '/icons/post_heart.png';
+
+    if (!data) {
+
+        console.log(postUID);
+
+        return (
+            <div className={styles.error_container}>
+                <h1 className={styles.error_heading}>404 - Post not found</h1>
+                <p className={styles.error_message}>The requested post does not exist.</p>
+            </div>
+        );
+    }
+
     return (
+
+
         <div className={styles.container}>
             <ToastContainer />
             <Image className={styles.close_button} src="/icons/close.png" width="20" height="20"></Image>
@@ -213,11 +303,11 @@ const Post = () => {
 
                     <div className={styles.left_bottom}>
                         <div className={styles.like_comment}>
-                            <span className={styles.like_count}>{data && data.likes.length} lượt thích</span>
+                            <span className={styles.like_count}>{numLikes} lượt thích</span>
                             <span className={styles.comment_count}>{data && data.comments.length} bình luận</span>
                         </div>
                         <div className={styles.actions}>
-                            <Image className={styles.action} src="/icons/post_heart.png" alt="" width="32" height="32" />
+                            <Image className={styles.action} src={iconLikeSrc} alt="" width="32" height="32" onClick={handlesReaction} />
                             <Image className={styles.action} src="/icons/post_comment.png" alt="" width="32" height="32" onClick={handleCommentClick} />
                             <Image className={styles.action} src="/icons/post_share.png" alt="" width="32" height="32" />
                         </div>
