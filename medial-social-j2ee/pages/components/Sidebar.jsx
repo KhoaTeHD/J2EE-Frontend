@@ -18,7 +18,7 @@ function changeSidebar() {
 
 const Sidebar = () => {
     const [currentUser, setCurrentUser] = useState(undefined);
-    const [notify,setNotify] = useState();
+    const [notify, setNotify] = useState();
     const router = useRouter();
     useEffect(() => {
         const user = AuthService.getCurrentUser();
@@ -35,22 +35,22 @@ const Sidebar = () => {
         var pusher = new Pusher('7c9f018d64bec3a78677', {
             cluster: 'ap3'
         });
-        
+
         var channel = pusher.subscribe('my-channel');
-        channel.bind('my-event', function(data) {
-            if(user.id == data){
+        channel.bind('my-event', function (data) {
+            if (user.id == data) {
                 setNotify(true);
             }
 
         });
-        
+
         return () => {
             pusher.unsubscribe('my-channel');
         };
 
     }, [router]);
 
-    const onClickFriends = () => { if(notify) {setNotify(false)}}
+    const onClickFriends = () => { if (notify) { setNotify(false) } }
 
     const logOut = () => {
         AuthService.logout();
@@ -86,7 +86,7 @@ const Sidebar = () => {
                         <Image className={styles.icon} src="/icons/icons8-friend-64.png" alt="" width="40" height="40" />
                         <p className={styles.text}>Bạn bè</p>
                     </Link>
-                    <Link className={styles.list_item} href={"/home"}>
+                    <Link className={styles.list_item} href={"/Chatbox"}>
                         <Image className={styles.icon} src="/icons/icons8-message-64.png" alt="" width="40" height="40" />
                         <p className={styles.text}>Tin nhắn</p>
                     </Link>

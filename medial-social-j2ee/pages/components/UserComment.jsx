@@ -8,6 +8,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 
+var choose = false;
+
 const UserComment = (props) => {
 
     var user = AuthService.getCurrentUser();
@@ -30,7 +32,8 @@ const UserComment = (props) => {
 
     const sendDataToPost = () => {
         const data = props.val.commentId;
-        props.sendDataToPost(data); // Gọi hàm từ props để gửi dữ liệu lên Post
+        choose = !choose;
+        props.sendDataToPost(data, choose); // Gọi hàm từ props để gửi dữ liệu lên Post
         setClick(!isClicked);
     };
 

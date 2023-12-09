@@ -127,10 +127,28 @@ const Post = () => {
         }
     };
 
-    let handleReceiveData = (dataFromUserComment) => {
+    let handleReceiveData = (dataFromUserComment, choose) => {
+        console.log(dataFromUserComment);
+        console.log(choose);
         handleCommentClick(); // Lưu dữ liệu từ UserComment vào state
         reply = dataFromUserComment;
         setSelectedComponent(reply);
+        // if (choose === true) {
+        //     handleCommentClick(); // Lưu dữ liệu từ UserComment vào state
+        //     reply = dataFromUserComment;
+        //     setSelectedComponent(reply);
+        // } else {
+        //     reply = null;
+        // }
+        // if (choose === true) {
+        //     handleCommentClick(); // Lưu dữ liệu từ UserComment vào state
+        //     reply = dataFromUserComment;
+        //     setSelectedComponent(reply);
+        // } else {
+        //     reply = null;
+        //     setSelectedComponent(reply);
+        // }
+
     };
 
     const handleSubmit = async () => {
@@ -235,9 +253,9 @@ const Post = () => {
 
         <div className={styles.container}>
             <ToastContainer />
-            <Image className={styles.close_button} src="/icons/close.png" width="20" height="20" onClick = {goBack}></Image>
+            <Image className={styles.close_button} src="/icons/close.png" width="20" height="20" onClick={goBack}></Image>
             <div className={styles.post_container}>
-                
+
                 {isVideo ? (
                     <div className={styles.post}>
                         <video className={styles.post_video} controls>
@@ -263,7 +281,7 @@ const Post = () => {
                         </div>
                     )
                 )}
-                
+
                 <div className={styles.left_img}>
                     <div className={styles.user}>
                         <Image className={styles.user_avt} src={data?.user?.avatar || "/images/avatar.png"} width="100" height="100"></Image>
