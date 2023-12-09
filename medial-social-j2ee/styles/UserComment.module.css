@@ -94,3 +94,8 @@
 .container_cmt_outer {
     background-color: #F6FCFE;
 }
+
+.link {
+    text-decoration: none;
+    color: #333;
+}

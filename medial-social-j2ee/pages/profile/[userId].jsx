@@ -14,7 +14,7 @@ const Profile = () => {
 
     const notify = (message) => toast.success(message, { autoClose: 1500 });
 
-    const [data, setData1] = useState([]);
+    const [data, setData1] = useState();
     const [num_friends, setData2] = useState([]);
     const [num_posts, setData3] = useState([]);
     const [check, setData4] = useState([]);
@@ -23,19 +23,24 @@ const Profile = () => {
 
     var user = AuthService.getCurrentUser();
 
-    const [requested,setRequested] = useState(false);
+    const [requested, setRequested] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
-            if(userId != null){
-                const response1 = await axios.get("http://localhost:8080/api/userProfile/id/" + userId, { headers: authHeader() })
-                setData1(response1.data);
-                const response2 = await axios.get("http://localhost:8080/api/userProfile/numFriends/" + userId, { headers: authHeader() })
-                setData2(response2.data);
-                const response3 = await axios.get("http://localhost:8080/api/userProfile/numPost/" + userId, { headers: authHeader() })
-                setData3(response3.data);
-                const response4 = await axios.get("http://localhost:8080/api/friends/checkfriend/"+ user.id + "," + userId, { headers: authHeader() })
-                setData4(response4.data);
+            if (userId != null) {
+                try {
+                    const response1 = await axios.get("http://localhost:8080/api/userProfile/id/" + userId, { headers: authHeader() })
+                    setData1(response1.data);
+                    const response2 = await axios.get("http://localhost:8080/api/userProfile/numFriends/" + userId, { headers: authHeader() })
+                    setData2(response2.data);
+                    const response3 = await axios.get("http://localhost:8080/api/userProfile/numPost/" + userId, { headers: authHeader() })
+                    setData3(response3.data);
+                    const response4 = await axios.get("http://localhost:8080/api/friends/checkfriend/" + user.id + "," + userId, { headers: authHeader() })
+                    setData4(response4.data);
+                }
+                catch (error) {
+
+                }
             }
         };
         fetchData();
@@ -53,13 +58,23 @@ const Profile = () => {
     }
 
     const addFriend = async () => {
-        const response = await axios.post("http://localhost:8080/api/requests/add/"+ user.id + "/" + userId , { headers: authHeader()})
+        const response = await axios.post("http://localhost:8080/api/requests/add/" + user.id + "/" + userId, { headers: authHeader() })
     };
 
     const addfriendHandler = () => {
         addFriend();
         setData4(2);
         notify("Gửi lời mời kết bạn thành công!");
+    }
+
+    if (!data) {
+
+        return (
+            <div className={styles.error_container}>
+                <h1 className={styles.error_heading}>404 - Page not found</h1>
+                <p className={styles.error_message}>The requested profile does not exist.</p>
+            </div>
+        );
     }
 
     return (
@@ -82,7 +97,7 @@ const Profile = () => {
 
                 <div className={styles.info}>
                     <div className={styles.info_top}>
-                        { check == 0 ? <p className={styles.add} onClick={addfriendHandler}>Thêm bạn bè</p> : check == 1 ? <p className={styles.add} onClick={unfriendHandler}>Hủy kết bạn</p> : <p className={styles.add}>Đã gửi lời mời kết bạn</p> }
+                        {check == 0 ? <p className={styles.add} onClick={addfriendHandler}>Thêm bạn bè</p> : check == 1 ? <p className={styles.add} onClick={unfriendHandler}>Hủy kết bạn</p> : <p className={styles.add}>Đã gửi lời mời kết bạn</p>}
                         <p className={styles.num_post}>{num_posts.toString().length === 1 && num_posts !== 0 ? "0" + num_posts : num_posts} bài viết</p>
                         <div className={styles.num_friends2}>
                             <p>{num_friends.toString().length === 1 && num_friends !== 0 ? "0" + num_friends : num_friends} bạn bè</p>

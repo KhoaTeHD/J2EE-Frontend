@@ -220,8 +220,6 @@ const Post = () => {
 
     if (!data) {
 
-        console.log(postUID);
-
         return (
             <div className={styles.error_container}>
                 <h1 className={styles.error_heading}>404 - Post not found</h1>

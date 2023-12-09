@@ -169,9 +169,6 @@ const CreatePost = () => {
                     console.error('Lỗi khi thêm bài viết:', error);
                 });
         }
-
-        
-
     };
 
     const [windowHeight, setWindowHeight] = useState();

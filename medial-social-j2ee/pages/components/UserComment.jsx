@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Link from 'next/link';
 
 const UserComment = (props) => {
 
@@ -37,11 +38,17 @@ const UserComment = (props) => {
         <div>
             <div className={styles.container}>
                 <div className={styles.user_avt}>
-                    <Image className={styles.comment_user_avt} src={props.val?.user?.avatar || "/images/avatar.png"} alt="Avatar" width="100" height="100"></Image>
+                    <Link className={styles.link} href={`/profile/${props.val.user.userId}`}>
+                        <Image className={styles.comment_user_avt} src={props.val?.user?.avatar || "/images/avatar.png"} alt="Avatar" width="100" height="100"></Image>
+                    </Link>
+
                 </div>
                 <div className={styles.user_cmt_container}>
                     <div className={isClicked && props.isSelected ? styles.user_name_comment_active : styles.user_name_comment}>
-                        <div className={isClicked && props.isSelected ? styles.user_name_active : styles.user_name}>{props.val.user.profileName}</div>
+                        <Link className={styles.link} href={`/profile/${props.val.user.userId}`}>
+                            <div className={isClicked && props.isSelected ? styles.user_name_active : styles.user_name}>{props.val.user.profileName}</div>
+                        </Link>
+
                         <div className={isClicked && props.isSelected ? styles.user_comment_active : styles.user_comment}>{props.val.content}</div>
                     </div>
                     <div className={styles.action}>

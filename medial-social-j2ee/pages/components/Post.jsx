@@ -215,6 +215,8 @@ const Post = (props) => {
     const avtSrcPostUser = postData?.user?.avatar || "/images/avatar.png";
     const avtSrcCurrUser = currUserData?.avatar || "/images/avatar.png";
     const iconLikeSrc = liked ? '/icons/post_ping_heart.png' : '/icons/post_heart.png';
+
+    const linkHref = postData?.user?.userId ? `/profile/${postData.user.userId}` : ``;
     //const 
     const isVideo = postData && postData.media && postData.media.length === 1 && postData.media[0].type === "Video";
 
@@ -244,8 +246,12 @@ const Post = (props) => {
             )}
             <div className={styles.top_container}>
                 <div className={styles.user}>
-                    <Image className={styles.user_avt} src={avtSrcPostUser} alt="Avatar" width="100" height="100"></Image>
-                    <span className={styles.user_name}>{postData && postData.user && postData.user.profileName}</span>
+                    <Link className={styles.link} href={linkHref}>
+                        <Image className={styles.user_avt} src={avtSrcPostUser} alt="Avatar" width="100" height="100"></Image>
+                    </Link>
+                    <Link className={styles.link} href={linkHref}>
+                        <span className={styles.user_name}>{postData && postData.user && postData.user.profileName}</span>
+                    </Link>
                     <span className={styles.dot1}>•</span>
                     <span className={styles.time_since_post}>{time}</span>
                 </div>

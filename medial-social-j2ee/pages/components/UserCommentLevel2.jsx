@@ -5,6 +5,7 @@ import authHeader from "../api/auth-header";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Link from 'next/link';
 
 const UserComment = (props) => {
 
@@ -29,11 +30,16 @@ const UserComment = (props) => {
         <div className={styles.container_cmt_outer}>
             <div className={styles.container_cmt}>
                 <div className={styles.user_avt}>
-                    <Image className={styles.comment_user_avt} src={props.val?.user?.avatar || "/images/avatar.png"} alt="Avatar" width="100" height="100"></Image>
+                    <Link className={styles.link} href={`/profile/${props.val.user.userId}`}>
+                        <Image className={styles.comment_user_avt} src={props.val?.user?.avatar || "/images/avatar.png"} alt="Avatar" width="100" height="100"></Image>
+                    </Link>
+
                 </div>
                 <div className={styles.user_cmt_container}>
                     <div className={styles.user_name_comment}>
-                        <div className={styles.user_name}>{props.val.user.profileName}</div>
+                        <Link className={styles.link} href={`/profile/${props.val.user.userId}`}>
+                            <div className={styles.user_name}>{props.val.user.profileName}</div>
+                        </Link>
                         <div className={styles.user_comment}>{props.val.content}</div>
                     </div>
                     <div className={styles.action}>
